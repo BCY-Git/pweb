@@ -1,0 +1,38 @@
+.footer {
+  border-top: 1px solid var(--border);
+  padding: 32px 0;
+  background: var(--bg-base);
+}
+
+.footer__inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.footer__text {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.footer__text a {
+  color: var(--accent-1);
+}
+
+.footer__text a:hover {
+  color: var(--accent-2);
+}
+
+.footer__sub {
+  color: var(--text-tertiary);
+  font-size: 0.8rem;
+}
+
+@media (max-width: 560px) {
+  .footer__inner {
+    flex-direction: column;
+    text-align: center;
+  }
+}

@@ -1,0 +1,59 @@
+/**
+ * 关键帧动画。
+ *
+ * Hero 背景的流动光晕：3 个径向渐变光斑缓慢位移，营造氛围。
+ */
+
+@keyframes drift-1 {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(80px, -60px) scale(1.15);
+  }
+}
+
+@keyframes drift-2 {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(-100px, 80px) scale(0.9);
+  }
+}
+
+@keyframes drift-3 {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(60px, 100px) scale(1.1);
+  }
+}
+
+@keyframes float-arrow {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+  50% {
+    transform: translateY(8px);
+    opacity: 0.8;
+  }
+}
+
+@keyframes pulse-dot {
+  0%,
+  100% {
+    opacity: 1;
+    box-shadow: 0 0 0 0 var(--accent-glow);
+  }
+  50% {
+    opacity: 0.7;
+    box-shadow: 0 0 0 8px transparent;
+  }
+}

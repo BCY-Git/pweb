@@ -1,0 +1,168 @@
+import { useState } from 'react'
+import { motion } from 'framer-motion'
+import { Check, Github, Globe, Mail, MessageSquare, Send } from 'lucide-react'
+import type { Profile } from '../types'
+import { api } from '../api'
+import { Section } from '../components/Section'
+import './Contact.css'
+
+interface ContactProps {
+  profile: Profile | null
+}
+
+export function Contact({ profile }: ContactProps) {
+  const [form, setForm] = useState({ name: '', email: '', content: '' })
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>(
+    'idle',
+  )
+  const [errorMsg, setErrorMsg] = useState('')
+
+  const onSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setStatus('loading')
+    setErrorMsg('')
+    try {
+      await api.sendMessage({
+        name: form.name.trim(),
+        email: form.email.trim() || undefined,
+        content: form.content.trim(),
+      })
+      setStatus('success')
+      setForm({ name: '', email: '', content: '' })
+      setTimeout(() => setStatus('idle'), 3000)
+    } catch (err) {
+      setStatus('error')
+      setErrorMsg(err instanceof Error ? err.message : '提交失败')
+    }
+  }
+
+  const channels = [
+    {
+      icon: Mail,
+      label: '邮箱',
+      value: profile?.email ?? 'martin@example.com',
+      href: profile?.email ? `mailto:${profile.email}` : undefined,
+    },
+    {
+      icon: Github,
+      label: 'GitHub',
+      value: 'github.com/martin',
+      href: profile?.githubUrl ?? 'https://github.com/',
+    },
+    {
+      icon: Globe,
+      label: 'Gitee',
+      value: 'gitee.com/martin',
+      href: profile?.giteeUrl ?? 'https://gitee.com/',
+    },
+  ]
+
+  return (
+    <Section id="contact" title="联系我" subtitle="contact">
+      <div className="contact">
+        <motion.div
+          className="contact__info"
+          initial={{ opacity: 0, x: -30 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.5 }}
+        >
+          <p className="contact__lead">
+            有合作意向或想聊聊？欢迎通过以下方式联系我，
+            或直接在右侧留言。
+          </p>
+          <div className="contact__channels">
+            {channels.map((c) => (
+              <a
+                key={c.label}
+                href={c.href ?? '#'}
+                target={c.href?.startsWith('http') ? '_blank' : undefined}
+                rel="noopener noreferrer"
+                className={
+                  c.href ? 'contact__channel' : 'contact__channel contact__channel--disabled'
+                }
+              >
+                <c.icon size={18} className="contact__channel-icon" />
+                <div>
+                  <div className="contact__channel-label mono">{c.label}</div>
+                  <div className="contact__channel-value">{c.value}</div>
+                </div>
+              </a>
+            ))}
+          </div>
+        </motion.div>
+
+        <motion.form
+          className="contact__form"
+          onSubmit={onSubmit}
+          initial={{ opacity: 0, x: 30 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+        >
+          <div className="contact__field">
+            <label htmlFor="name">姓名 *</label>
+            <input
+              id="name"
+              type="text"
+              required
+              maxLength={50}
+              value={form.name}
+              onChange={(e) => setForm({ ...form, name: e.target.value })}
+              placeholder="你的称呼"
+              disabled={status === 'loading'}
+            />
+          </div>
+          <div className="contact__field">
+            <label htmlFor="email">邮箱（可选）</label>
+            <input
+              id="email"
+              type="email"
+              value={form.email}
+              onChange={(e) => setForm({ ...form, email: e.target.value })}
+              placeholder="方便我回复你"
+              disabled={status === 'loading'}
+            />
+          </div>
+          <div className="contact__field">
+            <label htmlFor="content">留言 *</label>
+            <textarea
+              id="content"
+              required
+              minLength={1}
+              maxLength={1000}
+              rows={4}
+              value={form.content}
+              onChange={(e) => setForm({ ...form, content: e.target.value })}
+              placeholder="想聊点什么…"
+              disabled={status === 'loading'}
+            />
+          </div>
+
+          <button
+            type="submit"
+            className="contact__submit"
+            disabled={status === 'loading' || status === 'success'}
+          >
+            {status === 'loading' && <MessageSquare size={15} />}
+            {status === 'success' && <Check size={15} />}
+            {status === 'idle' && <Send size={15} />}
+            {status === 'error' && <Send size={15} />}
+            {status === 'loading'
+              ? '发送中…'
+              : status === 'success'
+                ? '已发送'
+                : '发送留言'}
+          </button>
+
+          {status === 'error' && (
+            <p className="contact__error">{errorMsg}</p>
+          )}
+          {status === 'success' && (
+            <p className="contact__success">感谢留言！我会尽快回复你。</p>
+          )}
+        </motion.form>
+      </div>
+    </Section>
+  )
+}

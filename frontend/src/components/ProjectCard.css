@@ -1,0 +1,139 @@
+.project-card {
+  position: relative;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.project-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-md), var(--shadow-glow);
+}
+
+.project-card--featured {
+  border-color: var(--border-strong);
+  background: linear-gradient(
+    135deg,
+    var(--bg-card) 0%,
+    var(--bg-elevated) 100%
+  );
+}
+
+.project-card--featured:hover {
+  box-shadow: var(--shadow-md), 0 0 32px var(--accent-glow);
+}
+
+.project-card__badge {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: var(--accent-gradient);
+  color: white;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 20px;
+  letter-spacing: 0.02em;
+}
+
+.project-card__name {
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.project-card__tagline {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  margin-top: 6px;
+  line-height: 1.5;
+}
+
+.project-card__highlights {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.project-card__highlights li {
+  position: relative;
+  padding-left: 20px;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
+.project-card__highlights li::before {
+  content: '';
+  position: absolute;
+  left: 4px;
+  top: 9px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent-gradient);
+}
+
+.project-card__tech {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.project-card__tech-tag {
+  padding: 4px 10px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  transition: all 0.2s ease;
+}
+
+.project-card:hover .project-card__tech-tag {
+  border-color: var(--border-strong);
+  color: var(--text-primary);
+}
+
+.project-card__actions {
+  display: flex;
+  gap: 12px;
+  margin-top: auto;
+  padding-top: 8px;
+}
+
+.project-card__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-strong);
+  transition: all 0.2s ease;
+}
+
+.project-card__btn:hover {
+  color: var(--text-primary);
+  background: var(--bg-card-hover);
+}
+
+.project-card__btn--primary {
+  background: var(--accent-gradient);
+  color: white;
+  border-color: transparent;
+}
+
+.project-card__btn--primary:hover {
+  color: white;
+  opacity: 0.9;
+}

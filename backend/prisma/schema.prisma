@@ -1,0 +1,82 @@
+// 个人简历站数据库 schema
+// 当前用 SQLite 过渡，schema 设计成可平滑迁移到 PostgreSQL 的形态。
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+/// 个人信息（单行表，id 固定为 1）
+model Profile {
+  id          Int      @id @default(1)
+  name        String
+  title       String   @map("title") // "AI Agent 全栈开发工程师"
+  bio         String   // Markdown 自我介绍
+  avatarUrl   String?
+  githubUrl   String?
+  giteeUrl    String?
+  email       String?
+  wechatQrUrl String?
+  resumeUrl   String? // 简历 PDF 下载链接
+  location    String?
+  updatedAt   DateTime @updatedAt
+}
+
+/// 项目展示
+model Project {
+  id          Int      @id @default(autoincrement())
+  slug        String   @unique // URL 友好标识
+  name        String
+  tagline     String // 一句话简介
+  description String // Markdown 详细介绍
+  coverUrl    String?
+  demoUrl     String?
+  repoUrl     String?
+  techStack   String // JSON 字符串（SQLite 不支持数组），存技术栈标签数组
+  highlights  String? // JSON 字符串，亮点数组
+  sortOrder   Int      @default(0)
+  isFeatured  Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([sortOrder])
+}
+
+/// 技能栈
+model Skill {
+  id        Int    @id @default(autoincrement())
+  category  String // frontend | backend | database | devops | ai
+  name      String
+  level     Int // 1-5 熟悉度
+  sortOrder Int    @default(0)
+
+  @@index([category, sortOrder])
+}
+
+/// 访客留言
+model Message {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String?
+  content   String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+}
+
+/// 访问日志（后续扩展统计）
+model VisitLog {
+  id        Int      @id @default(autoincrement())
+  path      String
+  referer   String?
+  userAgent String?
+  ip        String?
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+}
