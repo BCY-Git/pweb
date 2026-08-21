@@ -38,8 +38,7 @@ export class CsdnService implements OnApplicationBootstrap {
   ) {}
 
   private get username(): string {
-    // ConfigModule 未注册 load()，camelCase 键不可靠，直接读环境变量键
-    return this.config.get<string>('CSDN_USERNAME') ?? 'm0_64547013'
+    return this.config.get<string>('csdnUsername') ?? 'm0_64547013'
   }
 
   onApplicationBootstrap() {

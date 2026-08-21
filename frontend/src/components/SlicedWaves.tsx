@@ -246,7 +246,7 @@ const SlicedWaves = ({
     ro.observe(container)
     setSize()
 
-    let currentMouse = [0.5, 0.5]
+    const currentMouse = [0.5, 0.5]
     let targetMouse = [0.5, 0.5]
     let currentActive = 0
     let targetActive = 0
@@ -308,7 +308,8 @@ const SlicedWaves = ({
     const io = new IntersectionObserver(
       ([entry]) => {
         isVisible = entry.isIntersecting
-        isVisible ? tryStart() : tryStop()
+        if (isVisible) tryStart()
+        else tryStop()
       },
       // Hero 滚出 70% 时就暂停渲染（不必等完全不可见）
       { threshold: 0.3 },
@@ -317,7 +318,8 @@ const SlicedWaves = ({
 
     const onVisibility = () => {
       isPageVisible = !document.hidden
-      isPageVisible ? tryStart() : tryStop()
+      if (isPageVisible) tryStart()
+      else tryStop()
     }
     document.addEventListener('visibilitychange', onVisibility)
 

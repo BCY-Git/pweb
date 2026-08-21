@@ -152,10 +152,7 @@ const server = createServer((req, res) => {
 })
 
 server.listen(PORT, () => {
-  // eslint-disable-next-line no-console
   console.log(`[gateway] 监听 http://0.0.0.0:${PORT}`)
-  // eslint-disable-next-line no-console
   console.log(`[gateway] 静态文件: ${absStaticDir}`)
-  // eslint-disable-next-line no-console
   console.log(`[gateway] API 代理: → ${BACKEND_HOST}:${BACKEND_PORT}`)
 })

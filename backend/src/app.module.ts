@@ -3,7 +3,7 @@ import { ConfigModule } from '@nestjs/config'
 import { ScheduleModule } from '@nestjs/schedule'
 import { ThrottlerModule } from '@nestjs/throttler'
 import { AppController } from './app.controller'
-import { configValidationSchema } from './config/configuration'
+import configuration, { configValidationSchema } from './config/configuration'
 import { PrismaModule } from './prisma/prisma.module'
 import { ProfileModule } from './modules/profile/profile.module'
 import { ProjectsModule } from './modules/projects/projects.module'
@@ -19,6 +19,7 @@ import { CsdnModule } from './modules/csdn/csdn.module'
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      load: [configuration],
       validationSchema: configValidationSchema,
     }),
     ThrottlerModule.forRoot([{ ttl: 60_000, limit: 100 }]),

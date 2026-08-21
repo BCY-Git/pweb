@@ -257,7 +257,8 @@ const Particles = ({
     const io = new IntersectionObserver(
       ([entry]) => {
         isVisible = entry.isIntersecting
-        isVisible ? start() : stop()
+        if (isVisible) start()
+        else stop()
       },
       { threshold: 0.1 },
     )

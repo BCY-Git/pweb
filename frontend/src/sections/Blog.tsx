@@ -214,7 +214,21 @@ export function Blog({ overview, trend, articles }: BlogProps) {
     [articles],
   )
 
-  if (!latest) return null
+  if (!latest) {
+    return (
+      <Section id="blog" title="技术博客" subtitle="csdn blog">
+        <div className="blog-empty" role="status">
+          <FileText size={22} aria-hidden="true" />
+          <div>
+            <strong>CSDN 数据正在首次同步</strong>
+            <p>
+              同步完成后，这里会展示访问趋势、热门文章和最新发布内容。
+            </p>
+          </div>
+        </div>
+      </Section>
+    )
+  }
 
   const stats = [
     {
