@@ -6,6 +6,7 @@ import './Navbar.css'
 const NAV_ITEMS = [
   { href: '#hero', label: '首页' },
   { href: '#about', label: '关于' },
+  { href: '#csdn', label: '内容台' },
   { href: '#projects', label: '项目' },
   { href: '#skills', label: '技能' },
   { href: '#contact', label: '联系' },
