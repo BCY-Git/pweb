@@ -1,0 +1,26 @@
+.click-spark {
+  position: relative;
+  overflow: visible;
+  display: inline-block;
+}
+
+.click-spark__particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--cs-color, #22d3ee);
+  pointer-events: none;
+  animation: cs-fly 0.8s ease-out forwards;
+}
+
+@keyframes cs-fly {
+  0% {
+    opacity: 1;
+    transform: rotate(var(--cs-angle, 0deg)) translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: rotate(var(--cs-angle, 0deg)) translateY(-30px) scale(0.2);
+  }
+}

@@ -16,6 +16,8 @@ export const configValidationSchema = Joi.object({
   JWT_SECRET: Joi.string().min(16).required(),
   JWT_EXPIRES_IN: Joi.string().default('7d'),
   INIT_ADMIN_PASSWORD: Joi.string().allow('').default(''),
+  STATIC_DIR: Joi.string().allow('').default(''),
+  CSDN_USERNAME: Joi.string().default('m0_64547013'),
 })
 
 export interface AppConfig {
@@ -26,6 +28,8 @@ export interface AppConfig {
   jwtSecret: string
   jwtExpiresIn: string
   initAdminPassword: string
+  staticDir: string
+  csdnUsername: string
 }
 
 export default () => ({
@@ -39,4 +43,6 @@ export default () => ({
   jwtSecret: process.env.JWT_SECRET,
   jwtExpiresIn: process.env.JWT_EXPIRES_IN ?? '7d',
   initAdminPassword: process.env.INIT_ADMIN_PASSWORD ?? '',
+  staticDir: process.env.STATIC_DIR ?? '',
+  csdnUsername: process.env.CSDN_USERNAME ?? 'm0_64547013',
 })

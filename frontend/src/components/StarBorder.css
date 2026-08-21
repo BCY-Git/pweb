@@ -1,0 +1,45 @@
+/* @property 让 --angle 可被 animation */
+@property --sb-angle {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+
+.star-border {
+  position: relative;
+  border-radius: var(--sb-radius, 10px);
+  padding: 1.5px;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* 旋转的光带（conic-gradient） */
+.star-border::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: conic-gradient(
+    from var(--sb-angle, 0deg),
+    transparent 0%,
+    transparent 70%,
+    var(--sb-color, #22d3ee) 85%,
+    var(--sb-color, #22d3ee) 95%,
+    transparent 100%
+  );
+  animation: sb-rotate var(--sb-speed, 3s) linear infinite;
+  z-index: -1;
+}
+
+.star-border__inner {
+  position: relative;
+  border-radius: calc(var(--sb-radius, 10px) - 1.5px);
+  background: transparent;
+  z-index: 1;
+}
+
+@keyframes sb-rotate {
+  to {
+    --sb-angle: 360deg;
+  }
+}

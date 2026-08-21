@@ -1,78 +1,120 @@
-.skills {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 24px;
-}
+/**
+ * 技能板块 —— OptionWheel 滚轮布局。
+ */
 
-.skills__group {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 24px;
-  transition: border-color 0.3s ease;
-}
-
-.skills__group:hover {
-  border-color: var(--border-strong);
-}
-
-.skills__group-title {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 1.05rem;
-  font-weight: 600;
-  margin-bottom: 20px;
-}
-
-.skills__group-bar {
-  display: inline-block;
-  width: 3px;
-  height: 16px;
-  background: var(--accent-gradient);
-  border-radius: 2px;
-}
-
-.skills__items {
+.skills-wheel {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  align-items: center;
+  gap: 20px;
 }
 
-.skills__item-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  margin-bottom: 6px;
-}
-
-.skills__item-name {
-  font-size: 0.92rem;
-  color: var(--text-primary);
-}
-
-.skills__item-level {
-  font-size: 0.75rem;
+.skills-wheel__hint {
   color: var(--text-tertiary);
+  font-size: 0.82rem;
+  letter-spacing: 0.02em;
 }
 
-.skills__bar {
-  height: 4px;
+/* 滚轮视口 */
+.skills-wheel__viewport {
+  width: 100%;
+  max-width: 640px;
+  height: 360px;
+  position: relative;
   background: var(--bg-elevated);
-  border-radius: 2px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
   overflow: hidden;
 }
 
-.skills__bar-fill {
-  height: 100%;
-  background: var(--accent-gradient);
-  border-radius: 2px;
-  transition: width 0.6s ease;
+/* 上下边缘渐变遮罩 */
+.skills-wheel__viewport::before,
+.skills-wheel__viewport::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 90px;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.skills-wheel__viewport::before {
+  top: 0;
+  background: linear-gradient(
+    to bottom,
+    var(--bg-elevated),
+    transparent
+  );
+}
+
+.skills-wheel__viewport::after {
+  bottom: 0;
+  background: linear-gradient(
+    to top,
+    var(--bg-elevated),
+    transparent
+  );
+}
+
+/* 中央选中指引线（左右两条短横线标记中央位置） */
+.skills-wheel__viewport > .option-wheel::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 16px;
+  width: 20px;
+  height: 1px;
+  background: var(--accent-1);
+  transform: translateY(-50%);
+  z-index: 3;
+  opacity: 0.6;
+}
+
+/* 当前选中技能显示 */
+.skills-wheel__current {
+  font-size: 1.1rem;
+  font-weight: 500;
+  min-height: 1.8rem;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.skills-wheel__current-label {
+  color: var(--text-tertiary);
+  font-size: 0.85rem;
+  font-family: var(--font-mono);
+}
+
+/* 分类图例 */
+.skills-legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.skills-legend__tag {
+  padding: 4px 12px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  font-size: 0.76rem;
+  color: var(--text-tertiary);
 }
 
 .skills__empty {
   color: var(--text-tertiary);
   text-align: center;
   padding: 40px 0;
-  grid-column: 1 / -1;
+}
+
+/* 移动端 */
+@media (max-width: 640px) {
+  .skills-wheel__viewport {
+    height: 300px;
+  }
 }

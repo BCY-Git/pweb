@@ -8,7 +8,7 @@
   padding: var(--nav-height) 0 40px;
 }
 
-/* ── 背景光斑 ── */
+/* ── MoltenMetal 液态金属背景 ── */
 .hero__bg {
   position: absolute;
   inset: 0;
@@ -16,49 +16,33 @@
   overflow: hidden;
 }
 
-.hero__blob {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(80px);
-  opacity: 0.35;
-  will-change: transform;
-}
-
-.hero__blob--1 {
-  width: 480px;
-  height: 480px;
-  background: var(--accent-1);
-  top: -100px;
-  left: -80px;
-  animation: drift-1 24s ease-in-out infinite;
-}
-
-.hero__blob--2 {
-  width: 520px;
-  height: 520px;
-  background: var(--accent-2);
-  bottom: -120px;
-  right: -100px;
-  animation: drift-2 28s ease-in-out infinite;
-}
-
-.hero__blob--3 {
-  width: 360px;
-  height: 360px;
-  background: #6366f1;
-  top: 40%;
-  left: 50%;
-  opacity: 0.2;
-  animation: drift-3 32s ease-in-out infinite;
-}
-
-/* 噪点纹理：极淡的颗粒感，避免纯色平面 */
-.hero__noise {
+/* 轻量遮罩：DotGrid 点阵本身较暗，只需轻微压暗保证前景文字可读 */
+.hero__bg-overlay {
   position: absolute;
   inset: 0;
-  opacity: 0.03;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background: radial-gradient(
+    ellipse at center,
+    rgba(10, 10, 15, 0.15) 0%,
+    rgba(10, 10, 15, 0.35) 70%,
+    rgba(10, 10, 15, 0.6) 100%
+  );
   pointer-events: none;
+}
+
+/* 浅色主题：遮罩换成白色径向渐变，避免把浅色底压成灰色 */
+[data-theme='light'] .hero__bg-overlay {
+  background: radial-gradient(
+    ellipse at center,
+    rgba(250, 250, 250, 0.2) 0%,
+    rgba(250, 250, 250, 0.45) 70%,
+    rgba(250, 250, 250, 0.7) 100%
+  );
+}
+
+/* Particles 容器铺满 */
+.hero__bg > div:first-child {
+  position: absolute;
+  inset: 0;
 }
 
 /* ── 内容 ── */
@@ -86,12 +70,13 @@
   animation: pulse-dot 2s ease-in-out infinite;
 }
 
-.hero__name {
-  font-size: clamp(2.5rem, 8vw, 4.5rem);
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  line-height: 1.05;
-  margin-bottom: 16px;
+/* ParticleText 粒子姓名容器 */
+.hero__name-particles {
+  width: 100%;
+  max-width: 720px;
+  height: clamp(120px, 16vw, 200px);
+  margin: 0 auto 16px;
+  position: relative;
 }
 
 .hero__title {
@@ -118,31 +103,34 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 12px 24px;
+  padding: 12px 26px;
   border-radius: 10px;
-  font-weight: 500;
+  font-weight: 600;
   font-size: 0.95rem;
   color: var(--text-primary);
-  border: 1px solid var(--border-strong);
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
   transition: all 0.25s ease;
 }
 
 .hero__btn:hover {
-  background: var(--bg-card);
-  border-color: var(--text-tertiary);
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.35);
   transform: translateY(-2px);
 }
 
 .hero__btn--primary {
-  background: var(--accent-gradient);
-  color: white;
-  border-color: transparent;
+  background: #ffffff;
+  color: #0a0a0f;
+  border-color: #ffffff;
 }
 
 .hero__btn--primary:hover {
-  color: white;
-  opacity: 0.92;
-  box-shadow: 0 6px 20px var(--accent-glow);
+  background: #f4f4f5;
+  color: #0a0a0f;
+  box-shadow: 0 8px 28px rgba(255, 255, 255, 0.25);
 }
 
 /* ── 向下滚动指示 ── */

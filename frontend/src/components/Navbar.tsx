@@ -9,6 +9,7 @@ const NAV_ITEMS = [
   { href: '#csdn', label: '内容台' },
   { href: '#projects', label: '项目' },
   { href: '#skills', label: '技能' },
+  { href: '#blog', label: '博客' },
   { href: '#contact', label: '联系' },
 ]
 
