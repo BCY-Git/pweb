@@ -1,8 +1,13 @@
-import { Logger, ValidationPipe } from '@nestjs/common'
+import { Logger, RequestMethod, ValidationPipe } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { NestFactory } from '@nestjs/core'
+import type { NestExpressApplication } from '@nestjs/platform-express'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 import helmet from 'helmet'
+import { json, static as expressStatic, urlencoded } from 'express'
+import type { Express, Request, Response } from 'express'
+import { existsSync, readFileSync } from 'node:fs'
+import { join } from 'node:path'
 import { AppModule } from './app.module'
 import { AllExceptionsFilter } from './common/filters/all-exceptions.filter'
 import { TransformInterceptor } from './common/interceptors/transform.interceptor'
@@ -12,32 +17,51 @@ import { TransformInterceptor } from './common/interceptors/transform.intercepto
  *
  * 全局装配：
  * - /api/v1 前缀
- * - helmet 安全响应头
+ * - helmet 安全响应头（生产放宽 CSP 以允许内联样式）
  * - CORS（来源来自配置）
  * - 全局 ValidationPipe（防批量赋值、自动类型转换）
  * - 全局异常过滤器（统一错误响应）
  * - 全局响应转换拦截器（统一成功响应）
  * - Swagger 文档 /api-docs
+ * - 生产环境：SPA fallback，未匹配的非 API 请求回退到 index.html
  */
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, {
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     bufferLogs: true,
   })
   const config = app.get(ConfigService)
   const logger = new Logger('Bootstrap')
+  const isProd = config.get<string>('nodeEnv') === 'production'
 
-  // 全局前缀
-  app.setGlobalPrefix('api/v1')
+  // 全局前缀：所有业务 API 走 /api/v1
+  app.setGlobalPrefix('api/v1', {
+    exclude: [{ path: 'health', method: RequestMethod.GET }],
+  })
 
-  // 安全响应头
-  app.use(helmet())
+  // 静态文件托管 + SPA fallback 在 AppModule 中通过 ServeStaticModule 配置
+  // 这里只负责其他全局装配
 
-  // CORS
+  // 安全响应头（生产环境需要允许内联样式，否则 React 应用样式会失效）
+  if (isProd) {
+    app.use(
+      helmet({
+        contentSecurityPolicy: false,
+      }),
+    )
+  } else {
+    app.use(helmet())
+  }
+
+  // CORS：生产同源部署，放宽来源
   const corsOrigins = config.get<string[]>('corsOrigins') ?? []
   app.enableCors({
-    origin: corsOrigins,
+    origin: isProd ? true : corsOrigins,
     credentials: true,
   })
+
+  // body 解析（留言表单需要）
+  app.use(json({ limit: '1mb' }))
+  app.use(urlencoded({ extended: true }))
 
   // 全局管道：白名单校验 + 拒绝多余字段 + 自动类型转换
   app.useGlobalPipes(
@@ -53,7 +77,7 @@ async function bootstrap() {
   app.useGlobalFilters(new AllExceptionsFilter())
   app.useGlobalInterceptors(new TransformInterceptor())
 
-  // Swagger 文档
+  // Swagger 文档（生产也保留，方便查看）
   const swaggerConfig = new DocumentBuilder()
     .setTitle('Martin Portfolio API')
     .setDescription('个人简历站后端接口文档')
@@ -62,11 +86,40 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, swaggerConfig)
   SwaggerModule.setup('api-docs', app, document)
 
+  // 静态文件托管 + SPA fallback（生产环境，同源部署）
+  // 用底层 Express 实例注册，确保静态服务和 SPA 兜底正确工作。
+  // 通过 HttpAdapter 注册的通配路由会在所有 NestJS Controller 之后匹配。
+  const staticDir = config.get<string>('staticDir')
+  if (staticDir) {
+    const absStaticDir = join(process.cwd(), staticDir)
+    if (existsSync(absStaticDir)) {
+      const indexFile = join(absStaticDir, 'index.html')
+      const instance = app.getHttpAdapter().getInstance() as Express
+      // 用 Express 通配路由（Express 5 要求 (.*)），同时处理静态文件和 SPA fallback
+      instance.use(expressStatic(absStaticDir, { index: false }))
+      // SPA fallback：未匹配的非 API GET 请求返回 index.html
+      // 注意：HttpAdapter 的 use 注册的中间件在 NestJS 路由器之前执行，
+      // 这里用 express.static 的 fallthrough 让未命中的请求继续到 NestJS。
+      instance.get('(.*)', (req: Request, res: Response) => {
+        if (req.path.startsWith('/api/') || req.method !== 'GET') {
+          res.status(404).json({ code: 404, message: 'Not Found' })
+          return
+        }
+        if (existsSync(indexFile)) {
+          res.type('html').send(readFileSync(indexFile, 'utf-8'))
+          return
+        }
+        res.status(404).json({ code: 404, message: 'Not Found' })
+      })
+      logger.log(`静态文件托管: ${absStaticDir}`)
+    }
+  }
+
   const port = config.get<number>('port') ?? 3000
   await app.listen(port)
   logger.log(`服务已启动: http://localhost:${port}`)
   logger.log(`Swagger 文档: http://localhost:${port}/api-docs`)
-  logger.log(`健康检查: http://localhost:${port}/api/v1/health`)
+  logger.log(`健康检查: http://localhost:${port}/health`)
 }
 
 bootstrap().catch((err) => {

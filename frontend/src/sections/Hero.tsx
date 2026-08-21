@@ -1,5 +1,9 @@
 import { motion } from 'framer-motion'
 import { ArrowRight, ChevronDown, Mail } from 'lucide-react'
+import DotGrid from '../components/DotGrid'
+import ParticleText from '../components/ParticleText'
+import { StarBorder } from '../components/StarBorder'
+import { useTheme } from '../hooks/useTheme'
 import type { Profile } from '../types'
 import './Hero.css'
 
@@ -7,18 +11,42 @@ interface HeroProps {
   profile: Profile | null
 }
 
+/** DotGrid 配色随主题切换：深色底用暗灰点+青色点亮，浅色底用浅灰点+深青点亮 */
+const DOT_COLORS = {
+  dark: { baseColor: '#2b2b38', activeColor: '#22d3ee' },
+  light: { baseColor: '#dcdce4', activeColor: '#0891b2' },
+} as const
+
+/** 姓名粒子配色随主题切换：浅色主题用深灰粒子保证可读 */
+const NAME_COLORS = {
+  dark: { color: '#e4e4e7', highlightColor: '#22d3ee' },
+  light: { color: '#3f3f46', highlightColor: '#0891b2' },
+} as const
+
 export function Hero({ profile }: HeroProps) {
   const name = profile?.name ?? 'Martin'
   const title = profile?.title ?? 'AI Agent 全栈开发工程师'
+  const theme = useTheme((s) => s.theme)
+  const dotColors = DOT_COLORS[theme]
+  const nameColors = NAME_COLORS[theme]
 
   return (
     <section id="hero" className="hero">
-      {/* 流动渐变背景光斑 */}
+      {/* DotGrid 交互点阵背景（React Bits）：鼠标靠近点亮主题色，点击触发冲击波 */}
       <div className="hero__bg" aria-hidden="true">
-        <div className="hero__blob hero__blob--1" />
-        <div className="hero__blob hero__blob--2" />
-        <div className="hero__blob hero__blob--3" />
-        <div className="hero__noise" />
+        <DotGrid
+          dotSize={5}
+          gap={28}
+          baseColor={dotColors.baseColor}
+          activeColor={dotColors.activeColor}
+          proximity={130}
+          speedTrigger={80}
+          shockRadius={260}
+          shockStrength={4}
+          resistance={750}
+          returnDuration={1.4}
+        />
+        <div className="hero__bg-overlay" />
       </div>
 
       <div className="container hero__content">
@@ -31,14 +59,32 @@ export function Hero({ profile }: HeroProps) {
           <span className="hero__dot" /> 你好，我是
         </motion.p>
 
-        <motion.h1
-          className="hero__name"
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
+        {/* 粒子聚拢姓名（React Bits ParticleText）*/}
+        <motion.div
+          className="hero__name-particles"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.4, delay: 0.1 }}
         >
-          {name}
-        </motion.h1>
+          <ParticleText
+            text={name}
+            particleSize={2.2}
+            density={5}
+            color={nameColors.color}
+            highlightColor={nameColors.highlightColor}
+            scatter={200}
+            gatherDuration={1600}
+            stagger={450}
+            pointerRepel={40}
+            repelRadius={120}
+            idleDrift={0}
+            trigger="mount"
+            fontSize="clamp(3rem, 10vw, 6.5rem)"
+            fontWeight={800}
+            fontFamily="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+            glow={true}
+          />
+        </motion.div>
 
         <motion.p
           className="hero__title"
@@ -64,9 +110,16 @@ export function Hero({ profile }: HeroProps) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.4 }}
         >
-          <a href="#projects" className="hero__btn hero__btn--primary">
-            查看项目 <ArrowRight size={16} />
-          </a>
+          <StarBorder
+            className="hero__star-btn"
+            color="#22d3ee"
+            speed={4}
+            radius={10}
+          >
+            <a href="#projects" className="hero__btn hero__btn--primary">
+              查看项目 <ArrowRight size={16} />
+            </a>
+          </StarBorder>
           <a href="#contact" className="hero__btn">
             <Mail size={16} /> 联系我
           </a>
