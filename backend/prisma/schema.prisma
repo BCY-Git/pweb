@@ -80,3 +80,35 @@ model VisitLog {
 
   @@index([createdAt])
 }
+
+/// CSDN 博客每日统计快照（定时爬虫采集，用于趋势图）
+model CsdnSnapshot {
+  id             Int      @id @default(autoincrement())
+  date           String   @unique // YYYY-MM-DD（本地时区）
+  totalViews     Int // 总访问量
+  originalCount  Int // 原创文章数
+  fansCount      Int // 粉丝数
+  followingCount Int // 关注数
+  articleCount   Int // 本次采集到的文章总数
+  createdAt      DateTime @default(now())
+
+  @@index([date])
+}
+
+/// CSDN 文章（爬虫全量同步，articleId 唯一）
+model CsdnArticle {
+  id           Int      @id @default(autoincrement())
+  articleId    String   @unique // CSDN 文章 ID
+  title        String
+  url          String
+  description  String   @default("")
+  postTime     DateTime // 发布时间
+  viewCount    Int      @default(0) // 阅读量
+  diggCount    Int      @default(0) // 点赞数
+  commentCount Int      @default(0) // 评论数
+  isTop        Boolean  @default(false) // 是否置顶
+  updatedAt    DateTime @updatedAt
+
+  @@index([viewCount])
+  @@index([postTime])
+}

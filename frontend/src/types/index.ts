@@ -48,6 +48,38 @@ export interface SkillGroup {
   items: SkillItem[]
 }
 
+/** CSDN 每日统计快照 */
+export interface CsdnSnapshot {
+  date: string
+  totalViews: number
+  originalCount: number
+  fansCount: number
+  followingCount: number
+  articleCount: number
+}
+
+/** CSDN 概览（最新快照 + 上一次快照用于算增量） */
+export interface CsdnOverview {
+  username: string
+  blogUrl: string
+  latest: CsdnSnapshot
+  previous: CsdnSnapshot | null
+  syncedAt: string
+}
+
+/** CSDN 文章 */
+export interface CsdnArticle {
+  articleId: string
+  title: string
+  url: string
+  description: string
+  postTime: string
+  viewCount: number
+  diggCount: number
+  commentCount: number
+  isTop: boolean
+}
+
 /** 后端统一响应包装 */
 export interface ApiResponse<T> {
   code: number
