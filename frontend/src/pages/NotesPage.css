@@ -1,0 +1,162 @@
+/* ===== 笔记详情页（Markdown 渲染排版）===== */
+
+.notes-page {
+  min-height: 100vh;
+  background: var(--bg-base);
+}
+
+.notes-page__bar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  padding: 0.9rem 1.5rem;
+  background: var(--bg-overlay);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+
+.notes-page__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.notes-page__back:hover {
+  color: var(--accent-1);
+}
+
+.notes-page__body {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 6rem;
+  color: var(--text-primary);
+  line-height: 1.8;
+}
+
+.notes-page__loading,
+.notes-page__error {
+  color: var(--text-tertiary);
+  text-align: center;
+  padding: 4rem 0;
+}
+
+/* --- Markdown 元素排版 --- */
+.notes-page__body h1 {
+  font-size: 1.7rem;
+  margin: 0 0 0.5rem;
+}
+
+.notes-page__body h2 {
+  font-size: 1.25rem;
+  margin: 2.5rem 0 1rem;
+  padding: 0.75rem 1rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
+.notes-page__body h3 {
+  font-size: 1.02rem;
+  margin: 1.75rem 0 0.6rem;
+  color: var(--accent-1);
+}
+
+.notes-page__body p {
+  margin: 0.6rem 0;
+  color: var(--text-secondary);
+}
+
+.notes-page__body strong {
+  color: var(--text-primary);
+}
+
+.notes-page__body a {
+  color: var(--accent-1);
+}
+
+.notes-page__body ul {
+  padding-left: 1.4rem;
+  color: var(--text-secondary);
+}
+
+.notes-page__body li {
+  margin-bottom: 0.5rem;
+}
+
+.notes-page__body li::marker {
+  color: var(--accent-1);
+}
+
+.notes-page__body hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 2.2rem 0;
+}
+
+/* 行内代码 */
+.notes-page__body code {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  padding: 0.15rem 0.45rem;
+  border-radius: 5px;
+  font-size: 0.88em;
+  color: var(--accent-1);
+}
+
+/* 代码块 */
+.notes-page__body pre {
+  background: #0d0d14;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1rem 1.2rem;
+  overflow-x: auto;
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+
+.notes-page__body pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--text-primary);
+}
+
+/* 引用块（💡 心得 / ⚠️ 踩坑） */
+.notes-page__body blockquote {
+  margin: 0.75rem 0;
+  padding: 0.7rem 1rem;
+  border-left: 3px solid var(--accent-2);
+  background: var(--bg-card);
+  border-radius: 0 8px 8px 0;
+}
+
+.notes-page__body blockquote p {
+  margin: 0.3rem 0;
+}
+
+/* 表格 */
+.notes-page__body table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0.9rem 0;
+  font-size: 0.9rem;
+}
+
+.notes-page__body th,
+.notes-page__body td {
+  border: 1px solid var(--border);
+  padding: 0.6rem 0.8rem;
+  text-align: left;
+  vertical-align: top;
+  color: var(--text-secondary);
+}
+
+.notes-page__body th {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  font-weight: 600;
+  width: 22%;
+}

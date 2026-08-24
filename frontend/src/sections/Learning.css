@@ -1,0 +1,116 @@
+/* ===== 学习板块（笔记卡片）===== */
+
+.learning {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.25rem;
+}
+
+.learning-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1.4rem 1.5rem;
+  text-decoration: none;
+  transition:
+    border-color 0.2s,
+    transform 0.2s,
+    box-shadow 0.2s;
+}
+
+.learning-card:hover {
+  border-color: var(--border-strong);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+}
+
+.learning-card__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.learning-card__icon {
+  color: var(--accent-1);
+}
+
+.learning-card__status {
+  font-size: 0.75rem;
+  padding: 0.2rem 0.7rem;
+  border-radius: 20px;
+  color: var(--accent-1);
+  border: 1px solid var(--border-strong);
+}
+
+.learning-card__title {
+  margin: 0;
+  font-size: 1.1rem;
+  color: var(--text-primary);
+}
+
+.learning-card__desc {
+  margin: 0;
+  font-size: 0.88rem;
+  color: var(--text-tertiary);
+}
+
+/* 进度条 */
+.learning-card__progress {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-top: 0.3rem;
+}
+
+.learning-card__progress-bar {
+  height: 6px;
+  border-radius: 3px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+
+.learning-card__progress-fill {
+  height: 100%;
+  background: var(--accent-gradient);
+  border-radius: 3px;
+  transition: width 0.6s ease;
+}
+
+.learning-card__progress-text {
+  font-size: 0.78rem;
+  color: var(--text-tertiary);
+}
+
+.learning-card__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 0.4rem;
+}
+
+.learning-card__tags {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.learning-card__tag {
+  font-size: 0.72rem;
+  color: var(--text-tertiary);
+  border: 1px solid var(--border);
+  padding: 0.15rem 0.55rem;
+  border-radius: 6px;
+}
+
+.learning-card__more {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.82rem;
+  color: var(--accent-1);
+  white-space: nowrap;
+}

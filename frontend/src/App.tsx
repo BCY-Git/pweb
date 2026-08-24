@@ -5,6 +5,7 @@ import { Navbar } from './components/Navbar'
 import { About } from './sections/About'
 import { Contact } from './sections/Contact'
 import { Hero } from './sections/Hero'
+import { Learning } from './sections/Learning'
 import { Projects } from './sections/Projects'
 import { Skills } from './sections/Skills'
 import { useApplyTheme } from './hooks/useTheme'
@@ -64,6 +65,7 @@ export default function App() {
         <About profile={profile} stats={stats} />
         <Projects projects={projects} />
         <Skills groups={skills} />
+        <Learning />
         <Suspense fallback={null}>
           <Blog
             overview={csdnOverview}
