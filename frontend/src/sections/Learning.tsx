@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, type CSSProperties } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { BookOpen, ArrowRight } from 'lucide-react'
+import { ArrowUpRight, BookOpen } from 'lucide-react'
 import { Section } from '../components/Section'
 import './Learning.css'
 
@@ -16,6 +16,15 @@ interface NoteMeta {
   problemCount: number
   tags: string[]
   updatedAt: string
+}
+
+function formatUpdatedAt(value: string) {
+  const date = new Date(`${value}T00:00:00`)
+  if (Number.isNaN(date.getTime())) return value
+  return new Intl.DateTimeFormat('zh-CN', {
+    month: 'short',
+    day: 'numeric',
+  }).format(date)
 }
 
 /**
@@ -43,49 +52,64 @@ export function Learning() {
         viewport={{ once: true, margin: '-60px' }}
         transition={{ duration: 0.5 }}
       >
-        {notes.map((note) => (
-          <Link
-            key={note.slug}
-            to={`/notes/${note.slug}`}
-            className="learning-card"
-          >
-            <div className="learning-card__head">
-              <BookOpen size={20} className="learning-card__icon" />
-              <span className="learning-card__status">{note.status}</span>
-            </div>
-            <h3 className="learning-card__title">{note.title}</h3>
-            <p className="learning-card__desc">{note.description}</p>
+        <div className="learning__eyebrow">
+          <BookOpen size={16} aria-hidden="true" />
+          <span>持续积累 · 可追溯的学习记录</span>
+        </div>
+        <div className="learning__list">
+          {notes.map((note) => {
+            const progress = Math.min(
+              100,
+              Math.round((note.topicsDone / Math.max(note.topicsTotal, 1)) * 100),
+            )
+            return (
+              <motion.div
+                key={note.slug}
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.35 }}
+              >
+                <Link
+                  to={`/notes/${note.slug}`}
+                  className="learning-entry"
+                  aria-label={`阅读${note.title}，当前${note.status}`}
+                >
+                  <div
+                    className="learning-entry__progress"
+                    style={{ '--progress': `${progress}%` } as CSSProperties}
+                    aria-label={`学习进度 ${progress}%`}
+                  >
+                    <strong>{progress}</strong>
+                    <span>%</span>
+                  </div>
 
-            {/* 进度条 */}
-            <div className="learning-card__progress">
-              <div className="learning-card__progress-bar">
-                <div
-                  className="learning-card__progress-fill"
-                  style={{
-                    width: `${Math.round((note.topicsDone / note.topicsTotal) * 100)}%`,
-                  }}
-                />
-              </div>
-              <span className="learning-card__progress-text mono">
-                专题 {note.topicsDone}/{note.topicsTotal} · {note.problemCount} 题
-              </span>
-            </div>
+                  <div className="learning-entry__content">
+                    <div className="learning-entry__meta mono">
+                      <span className="learning-entry__status">{note.status}</span>
+                      <span>专题 {note.topicsDone}/{note.topicsTotal}</span>
+                      <span>{note.problemCount} 题</span>
+                    </div>
+                    <h3>{note.title}</h3>
+                    <p>{note.description}</p>
+                    <div className="learning-entry__tags">
+                      {note.tags.map((tag) => (
+                        <span key={tag}>{tag}</span>
+                      ))}
+                    </div>
+                  </div>
 
-            <div className="learning-card__foot">
-              <div className="learning-card__tags">
-                {note.tags.map((t) => (
-                  <span key={t} className="learning-card__tag mono">
-                    {t}
-                  </span>
-                ))}
-              </div>
-              <span className="learning-card__more">
-                阅读笔记
-                <ArrowRight size={14} />
-              </span>
-            </div>
-          </Link>
-        ))}
+                  <div className="learning-entry__action">
+                    <span>更新于 {formatUpdatedAt(note.updatedAt)}</span>
+                    <strong>
+                      查看笔记 <ArrowUpRight size={16} />
+                    </strong>
+                  </div>
+                </Link>
+              </motion.div>
+            )
+          })}
+        </div>
       </motion.div>
     </Section>
   )

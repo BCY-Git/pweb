@@ -20,13 +20,20 @@ export default function NotesPage() {
 
   useEffect(() => {
     if (!slug) return
-    fetch(`/notes/${slug}.md`)
+    const controller = new AbortController()
+    setContent(null)
+    setError(false)
+    fetch(`/notes/${slug}.md`, { signal: controller.signal })
       .then((res) => {
         if (!res.ok) throw new Error(`HTTP ${res.status}`)
         return res.text()
       })
       .then(setContent)
-      .catch(() => setError(true))
+      .catch((err: unknown) => {
+        if (err instanceof DOMException && err.name === 'AbortError') return
+        setError(true)
+      })
+    return () => controller.abort()
   }, [slug])
 
   useEffect(() => {
@@ -36,7 +43,7 @@ export default function NotesPage() {
   return (
     <div className="notes-page">
       <div className="notes-page__bar">
-        <Link to="/" className="notes-page__back">
+        <Link to="/#learning" className="notes-page__back">
           <ArrowLeft size={16} />
           返回首页
         </Link>
