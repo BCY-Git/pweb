@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
-import { useMemo, useState } from 'react'
-import OptionWheel from '../components/OptionWheel'
+import { useMemo } from 'react'
+import { DriftWall, type DriftWallItem } from '../components/DriftWall'
 import { Section } from '../components/Section'
 import type { SkillGroup } from '../types'
 import './Skills.css'
@@ -19,65 +19,84 @@ const CATEGORY_LABELS: Record<string, string> = {
 }
 
 export function Skills({ groups }: SkillsProps) {
-  // 把所有技能扁平化成标签数组（只显示技能名，避免文字过长导致重叠）
-  const allItems = useMemo(() => {
-    const items: string[] = []
-    for (const g of groups) {
-      for (const item of g.items) {
-        items.push(item.name)
-      }
+  const wallItems = useMemo<DriftWallItem[]>(() => {
+    const colors: Record<string, [string, string]> = {
+      frontend: ['#155e75', '#4f46e5'],
+      backend: ['#4338ca', '#7e22ce'],
+      database: ['#0f766e', '#0369a1'],
+      devops: ['#9a3412', '#be185d'],
+      ai: ['#6d28d9', '#0891b2'],
     }
-    return items
-  }, [groups])
 
-  // 找到当前选中技能所属的分类
-  const [selectedIdx, setSelectedIdx] = useState(Math.floor(0))
+    return groups.flatMap((group, groupIndex) =>
+      group.items.map((item, itemIndex) => {
+        const [start, end] = colors[group.category] ?? ['#155e75', '#7e22ce']
+        const offset = (groupIndex * 19 + itemIndex * 13) % 72
+        const artwork = encodeURIComponent(`
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 240" fill="none">
+            <defs>
+              <linearGradient id="g" x1="0" y1="0" x2="360" y2="240" gradientUnits="userSpaceOnUse">
+                <stop stop-color="${start}"/><stop offset="1" stop-color="${end}"/>
+              </linearGradient>
+              <filter id="b"><feGaussianBlur stdDeviation="22"/></filter>
+            </defs>
+            <rect width="360" height="240" fill="#080b14"/>
+            <rect width="360" height="240" fill="url(#g)" opacity=".78"/>
+            <circle cx="${80 + offset}" cy="58" r="70" fill="#67e8f9" opacity=".48" filter="url(#b)"/>
+            <circle cx="${294 - offset}" cy="192" r="88" fill="#c084fc" opacity=".4" filter="url(#b)"/>
+            <path d="M-24 188C78 ${116 - offset} 168 ${256 + offset} 384 64" stroke="white" stroke-opacity=".22" stroke-width="1"/>
+            <path d="M-18 210C88 ${142 - offset} 216 ${270 + offset} 378 86" stroke="white" stroke-opacity=".14" stroke-width="1"/>
+          </svg>
+        `)
+        return {
+          image: `data:image/svg+xml;charset=UTF-8,${artwork}`,
+          title: item.name,
+          subtitle: `${CATEGORY_LABELS[group.category] ?? group.label} · 熟练度 ${item.level}/5`,
+        }
+      }),
+    )
+  }, [groups])
 
   return (
     <Section id="skills" title="技能栈" subtitle="skills">
       <motion.div
-        className="skills-wheel"
+        className="skills-wall"
         initial={{ opacity: 0, y: 24 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: '-60px' }}
         transition={{ duration: 0.5 }}
       >
-        <p className="skills-wheel__hint mono">
-          // 滚动 · 拖拽 · 方向键 浏览全部 {allItems.length} 项技能
-        </p>
+        <div className="skills-wall__intro">
+          <p className="skills-wall__eyebrow mono">// TECHNOLOGY IN MOTION</p>
+          <p className="skills-wall__hint">
+            鼠标移动可改变视角；悬停技能卡片查看所属方向与熟练度。
+          </p>
+        </div>
 
-        <div className="skills-wheel__viewport">
-          {allItems.length > 0 && (
-            <OptionWheel
-              items={allItems}
-              defaultSelected={0}
-              onChange={(idx) => setSelectedIdx(idx)}
-              textColor="var(--text-tertiary)"
-              activeColor="var(--accent-1)"
-              side="left"
-              fontSize={2}
-              spacing={1.5}
-              curve={0.8}
-              tilt={5}
-              blur={1.5}
-              fade={0.2}
-              minOpacity={0.08}
-              smoothing={200}
-              inset={40}
-              loop={true}
-              draggable={true}
+        <div className="skills-wall__viewport">
+          {wallItems.length > 0 && (
+            <DriftWall
+              items={wallItems}
+              columns={5}
+              tileWidth={176}
+              tileHeight={118}
+              gap={14}
+              tilt={14}
+              turn={-12}
+              perspective={1200}
+              depth={88}
+              speed={20}
+              variance={0.35}
+              parallax={0.45}
+              lift={52}
+              fade={0.55}
+              dim={0.72}
+              overlayColor="rgba(7, 10, 18, 0.24)"
             />
           )}
         </div>
 
-        {allItems[selectedIdx] && (
-          <div className="skills-wheel__current">
-            <span className="skills-wheel__current-label">当前技能：</span>
-            <span className="gradient-text">{allItems[selectedIdx]}</span>
-          </div>
-        )}
-
-        {allItems.length === 0 && (
+        {wallItems.length === 0 && (
           <p className="skills__empty">技能数据加载中…</p>
         )}
       </motion.div>

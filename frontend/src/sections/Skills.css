@@ -1,91 +1,65 @@
 /**
- * 技能板块 —— OptionWheel 滚轮布局。
+ * 技能板块 —— DriftWall 漂浮技术墙。
  */
 
-.skills-wheel {
+.skills-wall {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
+  gap: 18px;
 }
 
-.skills-wheel__hint {
-  color: var(--text-tertiary);
-  font-size: 0.82rem;
-  letter-spacing: 0.02em;
-}
-
-/* 滚轮视口 */
-.skills-wheel__viewport {
+.skills-wall__intro {
   width: 100%;
-  max-width: 640px;
-  height: 360px;
-  position: relative;
-  background: var(--bg-elevated);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-}
-
-/* 上下边缘渐变遮罩 */
-.skills-wheel__viewport::before,
-.skills-wheel__viewport::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  height: 90px;
-  pointer-events: none;
-  z-index: 2;
-}
-
-.skills-wheel__viewport::before {
-  top: 0;
-  background: linear-gradient(
-    to bottom,
-    var(--bg-elevated),
-    transparent
-  );
-}
-
-.skills-wheel__viewport::after {
-  bottom: 0;
-  background: linear-gradient(
-    to top,
-    var(--bg-elevated),
-    transparent
-  );
-}
-
-/* 中央选中指引线（左右两条短横线标记中央位置） */
-.skills-wheel__viewport > .option-wheel::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 16px;
-  width: 20px;
-  height: 1px;
-  background: var(--accent-1);
-  transform: translateY(-50%);
-  z-index: 3;
-  opacity: 0.6;
-}
-
-/* 当前选中技能显示 */
-.skills-wheel__current {
-  font-size: 1.1rem;
-  font-weight: 500;
-  min-height: 1.8rem;
+  max-width: 760px;
   text-align: center;
-  display: flex;
-  align-items: center;
-  gap: 8px;
 }
 
-.skills-wheel__current-label {
+.skills-wall__eyebrow {
+  margin: 0 0 8px;
+  color: var(--accent-1);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+}
+
+.skills-wall__hint {
+  margin: 0;
   color: var(--text-tertiary);
-  font-size: 0.85rem;
-  font-family: var(--font-mono);
+  font-size: 0.9rem;
+}
+
+/* 视口只承担空间与光晕，不再以卡片外框抢占视觉。 */
+.skills-wall__viewport {
+  width: 100%;
+  height: 500px;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.skills-wall__viewport::before,
+.skills-wall__viewport::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  width: 34%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  filter: blur(54px);
+  pointer-events: none;
+  opacity: 0.42;
+}
+
+.skills-wall__viewport::before {
+  top: 14%;
+  left: 4%;
+  background: var(--accent-1);
+}
+
+.skills-wall__viewport::after {
+  right: 3%;
+  bottom: 10%;
+  background: var(--accent-2);
 }
 
 /* 分类图例 */
@@ -114,7 +88,14 @@
 
 /* 移动端 */
 @media (max-width: 640px) {
-  .skills-wheel__viewport {
-    height: 300px;
+  .skills-wall__viewport {
+    height: 390px;
+    margin-inline: -12px;
+    width: calc(100% + 24px);
+  }
+
+  .skills-wall__hint {
+    padding-inline: 18px;
+    font-size: 0.84rem;
   }
 }
