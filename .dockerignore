@@ -1,0 +1,11 @@
+.git
+.github
+**/node_modules
+**/dist
+**/.playwright-cli
+.env
+.env.*
+*.db
+*.db-journal
+coverage
+tools

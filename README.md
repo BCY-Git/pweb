@@ -6,14 +6,18 @@
 
 - **后端**：NestJS 11 · TypeScript(strict) · Prisma · SQLite(过渡，可迁移 PostgreSQL) · Swagger · helmet
 - **前端**：React 18 · TypeScript(strict) · Vite 6 · React Router 6 · Zustand · Framer Motion · lucide-react
-- **工程化**：ESLint · Prettier · Husky · lint-staged · Commitlint · Docker · GitHub Actions
+- **工程化**：pnpm Workspace · ESLint · Prettier · Docker · GitHub Actions
 
 ## 目录结构
 
 ```
 website/
-├── backend/      NestJS 后端（独立 package）
-├── frontend/     React 前端（独立 package）
+├── package.json          # 根命令与运行时约束
+├── pnpm-workspace.yaml   # MonoRepo 工作区定义
+├── pnpm-lock.yaml        # 全仓唯一依赖锁文件
+├── tsconfig.base.json    # 前后端共享的 TS 基线
+├── backend/              # @martin-portfolio/api（NestJS + Prisma）
+├── frontend/             # @martin-portfolio/web（React + Vite）
 ├── deploy/       docker-compose 部署
 └── .github/      CI 工作流
 ```
@@ -22,27 +26,30 @@ website/
 
 ### 环境要求
 
-- Node.js >= 18.18（推荐 20，见 `.nvmrc`）
-- npm 10+
+- Node.js >= 20（见 `.nvmrc`）
+- pnpm 11+（Corepack 会自动使用仓库锁定的版本）
 
 ### 安装与开发
 
 ```bash
-# 后端
-cd backend
-cp .env.example .env
-npm install
-npm run db:migrate   # 建表
-npm run db:seed      # 写入种子数据
-npm run dev          # http://localhost:3000，Swagger: /api-docs
+# 安装全部工作区依赖（仅首次或锁文件变化后）
+corepack enable
+pnpm install
 
-# 前端（另开终端）
-cd frontend
-npm install
-npm run dev          # http://localhost:5173
+# 后端环境变量、数据库初始化
+cp backend/.env.example backend/.env
+pnpm --filter @martin-portfolio/api db:migrate
+pnpm --filter @martin-portfolio/api db:seed
+
+# 同时启动前后端
+pnpm dev
+# 前端：http://localhost:5173
+# 后端：http://localhost:3000，Swagger：/api-docs
 ```
 
 前端 dev server 已配置代理：`/api` → `http://localhost:3000`，可直接联调。
+
+常用质量命令：`pnpm check`（生成 Prisma Client、lint、类型检查、构建）和 `pnpm test`。
 
 ### 生产部署
 

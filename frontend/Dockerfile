@@ -1,23 +1,29 @@
+# MonoRepo 根目录作为 Docker build context（见 deploy/docker-compose.yml）
 # ─── 阶段 1: 构建 ───
 FROM node:20-slim AS builder
-WORKDIR /app
+WORKDIR /workspace
 
-COPY package*.json ./
-RUN npm ci
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN corepack enable
 
-COPY tsconfig.json vite.config.ts index.html ./
-COPY src ./src/
-COPY public ./public/
-RUN npm run build
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY frontend/package.json ./frontend/package.json
+RUN pnpm install --frozen-lockfile --filter @martin-portfolio/web...
+
+COPY tsconfig.base.json ./
+COPY frontend ./frontend
+WORKDIR /workspace/frontend
+RUN pnpm build
 
 # ─── 阶段 2: nginx 托管 ───
 FROM nginx:alpine AS runner
 
 # 拷构建产物
-COPY --from=builder /app/dist /usr/share/nginx/html
+COPY --from=builder /workspace/frontend/dist /usr/share/nginx/html
 
 # 拷 nginx 配置（反代 /api 到后端）
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=builder /workspace/frontend/nginx.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 80
 
