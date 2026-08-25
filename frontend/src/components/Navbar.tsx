@@ -33,6 +33,7 @@ type Particle = {
   y: number
   size: number
   delay: number
+  color: string
 }
 
 export function Navbar() {
@@ -64,20 +65,22 @@ export function Navbar() {
 
   const burst = useCallback(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-    const next = Array.from({ length: 9 }, () => {
+    const palette = ['#73e6ff', '#69b7ff', '#9d86ff', '#d084ff']
+    const next = Array.from({ length: 15 }, (_, index) => {
       const angle = Math.random() * Math.PI * 2
-      const distance = 22 + Math.random() * 38
+      const distance = 10 + Math.random() * 80
       return {
         id: particleId.current++,
         x: Math.cos(angle) * distance,
         y: Math.sin(angle) * distance,
-        size: 4 + Math.random() * 7,
-        delay: Math.random() * 80,
+        size: 3 + Math.random() * 6,
+        delay: Math.random() * 300,
+        color: palette[index % palette.length] ?? palette[0],
       }
     })
     setParticles(next)
     if (particleTimer.current) window.clearTimeout(particleTimer.current)
-    particleTimer.current = window.setTimeout(() => setParticles([]), 650)
+    particleTimer.current = window.setTimeout(() => setParticles([]), 960)
   }, [])
 
   const activate = useCallback(
@@ -165,6 +168,7 @@ export function Navbar() {
                       '--particle-y': `${particle.y}px`,
                       '--particle-size': `${particle.size}px`,
                       '--particle-delay': `${particle.delay}ms`,
+                      '--particle-color': particle.color,
                     } as CSSProperties
                   }
                 />
