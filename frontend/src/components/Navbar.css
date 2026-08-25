@@ -53,11 +53,11 @@
   display: flex;
   isolation: isolate;
   padding: 5px;
-  border: 1px solid rgb(255 255 255 / 0.12);
+  border: 1px solid rgb(255 255 255 / 0.16);
   border-radius: 999px;
-  background: color-mix(in srgb, var(--bg-card) 90%, transparent);
+  background: rgb(18 15 23 / 0.94);
   box-shadow:
-    inset 0 1px 0 rgb(255 255 255 / 0.08),
+    inset 0 1px 0 rgb(255 255 255 / 0.07),
     0 9px 28px rgb(0 0 0 / 0.18);
 }
 
@@ -70,7 +70,7 @@
 .navbar__nav a {
   padding: 12px 18px;
   border-radius: 999px;
-  color: var(--text-secondary);
+  color: rgb(255 255 255 / 0.78);
   font-size: 1.03rem;
   font-weight: 500;
   line-height: 1;
@@ -78,11 +78,11 @@
 }
 
 .navbar__nav a:hover {
-  color: var(--text-primary);
+  color: white;
 }
 
 .navbar__nav a.is-active {
-  color: white;
+  color: #120f17;
 }
 
 .navbar__nav a:focus-visible {
@@ -96,10 +96,9 @@
   display: block;
   border-radius: 999px;
   pointer-events: none;
-  background: linear-gradient(135deg, #4ee2ff 0%, #6f9eff 54%, #b072ff 100%);
+  background: #f5f5f5;
   box-shadow:
-    0 8px 20px rgb(78 226 255 / 0.28),
-    0 0 22px rgb(134 116 255 / 0.26);
+    0 4px 14px rgb(0 0 0 / 0.2);
   transition:
     left 0.48s var(--linear-ease, cubic-bezier(0.22, 1, 0.36, 1)),
     top 0.48s var(--linear-ease, cubic-bezier(0.22, 1, 0.36, 1)),
@@ -109,13 +108,13 @@
 
 .navbar__gooey-indicator::before {
   position: absolute;
-  inset: -8px;
+  inset: -3px;
   z-index: -1;
   border-radius: inherit;
   background: inherit;
   content: '';
-  filter: blur(12px);
-  opacity: 0.62;
+  filter: blur(8px);
+  opacity: 0.14;
 }
 
 .navbar__gooey-particle {
@@ -126,7 +125,7 @@
   height: var(--particle-size);
   border-radius: 50%;
   background: var(--particle-color, var(--accent-1));
-  box-shadow: 0 0 12px var(--particle-color, var(--accent-1));
+  box-shadow: 0 0 10px var(--particle-color, #fff);
   animation: navbar-particle 0.6s cubic-bezier(0.16, 1, 0.3, 1) var(--particle-delay) both;
 }
 
@@ -181,7 +180,7 @@
     left: 0;
     right: 0;
     flex-direction: column;
-    background: var(--bg-overlay);
+    background: rgb(18 15 23 / 0.98);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--border);
@@ -208,8 +207,8 @@
   }
 
   .navbar__nav a.is-active {
-    color: var(--accent-1);
-    background: var(--bg-card);
+    color: #120f17;
+    background: #f5f5f5;
   }
 
   .navbar__gooey-indicator { display: none; }

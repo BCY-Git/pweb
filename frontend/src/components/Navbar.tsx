@@ -20,6 +20,11 @@ const NAV_ITEMS = [
   { href: '#contact', label: '联系' },
 ]
 
+// 与 GooeyNav 示例的 `colors={[1, 2, 3, 1, 2, 3, 1, 4]}` 对应。
+// 白色胶囊保留为主视觉，粒子使用源码示例中的白／靛蓝／洋红层次。
+const GOOEY_COLORS = ['#ffffff', '#241bff', '#ff00d9', '#ddd4ff']
+const GOOEY_COLOR_SEQUENCE = [0, 1, 2, 0, 1, 2, 0, 3]
+
 type Indicator = {
   left: number
   top: number
@@ -65,7 +70,6 @@ export function Navbar() {
 
   const burst = useCallback(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-    const palette = ['#73e6ff', '#69b7ff', '#9d86ff', '#d084ff']
     const next = Array.from({ length: 15 }, (_, index) => {
       const angle = Math.random() * Math.PI * 2
       const distance = 10 + Math.random() * 80
@@ -75,7 +79,9 @@ export function Navbar() {
         y: Math.sin(angle) * distance,
         size: 3 + Math.random() * 6,
         delay: Math.random() * 300,
-        color: palette[index % palette.length] ?? palette[0],
+        color:
+          GOOEY_COLORS[GOOEY_COLOR_SEQUENCE[index % GOOEY_COLOR_SEQUENCE.length] ?? 0] ??
+          GOOEY_COLORS[0],
       }
     })
     setParticles(next)
