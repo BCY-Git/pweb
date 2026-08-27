@@ -5,7 +5,6 @@ import type { NestExpressApplication } from '@nestjs/platform-express'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 import helmet from 'helmet'
 import { json, static as expressStatic, urlencoded } from 'express'
-import type { Express, Request, Response } from 'express'
 import { existsSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { AppModule } from './app.module'
@@ -73,47 +72,35 @@ async function bootstrap() {
     }),
   )
 
+  // 静态文件托管 + SPA fallback（生产环境，同源部署）
+  // 注意：Express 5 / path-to-regexp v8 不支持 '(.*)' 通配路由（运行时抛 PathError），
+  // 且 Nest 11 在 listen() 时才注册路由，init 后挂载的兜底中间件实际排在 Nest 路由之前，
+  // 会吞掉 /api-docs 等页面路由。因此采用：
+  //   1. express.static 前置挂载（未命中 fallthrough，不影响 API 路由）
+  //   2. SPA fallback 由全局异常过滤器兜底（404 + GET + 非 /api 时返回 index.html）
+  const staticDir = config.get<string>('staticDir')
+  const absStaticDir = staticDir ? join(process.cwd(), staticDir) : ''
+  const spaIndexFile =
+    absStaticDir && existsSync(join(absStaticDir, 'index.html'))
+      ? join(absStaticDir, 'index.html')
+      : ''
+  if (spaIndexFile) {
+    app.use(expressStatic(absStaticDir, { index: false }))
+    logger.log(`静态文件托管: ${absStaticDir}`)
+  }
+
   // 全局异常过滤 / 响应转换
-  app.useGlobalFilters(new AllExceptionsFilter())
+  app.useGlobalFilters(new AllExceptionsFilter(spaIndexFile))
   app.useGlobalInterceptors(new TransformInterceptor())
 
   // Swagger 文档（生产也保留，方便查看）
   const swaggerConfig = new DocumentBuilder()
-    .setTitle('Martin Portfolio API')
+    .setTitle('鲍传宇个人网站 API')
     .setDescription('个人简历站后端接口文档')
     .setVersion('1.0')
     .build()
   const document = SwaggerModule.createDocument(app, swaggerConfig)
   SwaggerModule.setup('api-docs', app, document)
-
-  // 静态文件托管 + SPA fallback（生产环境，同源部署）
-  // 用底层 Express 实例注册，确保静态服务和 SPA 兜底正确工作。
-  // 通过 HttpAdapter 注册的通配路由会在所有 NestJS Controller 之后匹配。
-  const staticDir = config.get<string>('staticDir')
-  if (staticDir) {
-    const absStaticDir = join(process.cwd(), staticDir)
-    if (existsSync(absStaticDir)) {
-      const indexFile = join(absStaticDir, 'index.html')
-      const instance = app.getHttpAdapter().getInstance() as Express
-      // 用 Express 通配路由（Express 5 要求 (.*)），同时处理静态文件和 SPA fallback
-      instance.use(expressStatic(absStaticDir, { index: false }))
-      // SPA fallback：未匹配的非 API GET 请求返回 index.html
-      // 注意：HttpAdapter 的 use 注册的中间件在 NestJS 路由器之前执行，
-      // 这里用 express.static 的 fallthrough 让未命中的请求继续到 NestJS。
-      instance.get('(.*)', (req: Request, res: Response) => {
-        if (req.path.startsWith('/api/') || req.method !== 'GET') {
-          res.status(404).json({ code: 404, message: 'Not Found' })
-          return
-        }
-        if (existsSync(indexFile)) {
-          res.type('html').send(readFileSync(indexFile, 'utf-8'))
-          return
-        }
-        res.status(404).json({ code: 404, message: 'Not Found' })
-      })
-      logger.log(`静态文件托管: ${absStaticDir}`)
-    }
-  }
 
   const port = config.get<number>('port') ?? 3000
   await app.listen(port)

@@ -8,6 +8,7 @@ import {
 } from '@nestjs/common'
 import { Prisma } from '@prisma/client'
 import { Request, Response } from 'express'
+import { existsSync, readFileSync } from 'node:fs'
 
 /**
  * 全局异常过滤器。
@@ -23,6 +24,13 @@ import { Request, Response } from 'express'
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {
   private readonly logger = new Logger(AllExceptionsFilter.name)
+
+  /**
+   * @param spaIndexFile SPA 的 index.html 绝对路径（可选）。
+   *   传入后，未匹配路由的 GET 请求（404）会回退到 index.html，
+   *   由前端路由接管（/notes/:slug 等页面路由）。
+   */
+  constructor(private readonly spaIndexFile = '') {}
 
   catch(exception: unknown, host: ArgumentsHost): void {
     const ctx = host.switchToHttp()
@@ -60,6 +68,18 @@ export class AllExceptionsFilter implements ExceptionFilter {
       this.logger.error(
         `${request.method} ${request.url} → ${status} ${message}`,
       )
+    }
+
+    // SPA fallback：未匹配路由的 GET 页面请求回退到 index.html
+    if (
+      status === 404 &&
+      this.spaIndexFile &&
+      request.method === 'GET' &&
+      !request.path.startsWith('/api/') &&
+      existsSync(this.spaIndexFile)
+    ) {
+      response.type('html').send(readFileSync(this.spaIndexFile, 'utf-8'))
+      return
     }
 
     response.status(status).json({ code, message })
