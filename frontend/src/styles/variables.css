@@ -2,16 +2,24 @@
  * 设计令牌（Design Tokens）—— CSS 变量。
  *
  * 深色优先 + 明暗切换。通过 [data-theme="light"] 覆盖。
- * 配色参照 react.bits：深黑底 + 青紫渐变强调色。
+ * 配色采用深黑底 + 单一青色强调色。
  */
 
 :root {
   /* ── 深色主题（默认）── */
   --bg-base: #0a0a0f;
+  /* 区间交替色：比 base 略亮，深色模式下也有「底色微差」节奏 */
+  --bg-section-alt: #0e1018;
   --bg-elevated: #13131a;
   --bg-card: #1a1a24;
   --bg-card-hover: #22222e;
   --bg-overlay: rgba(10, 10, 15, 0.8);
+
+  /* 页脚固定深墨青黑（两个主题统一）：与 Hero 深色首尾呼应，
+     参考 legal 站的藏青 footer 手法——浅色内容区用深色收尾 */
+  --bg-footer: #0c1420;
+  --footer-text: #8ba3b5;
+  --footer-text-dim: #5a6d7d;
 
   --border: rgba(255, 255, 255, 0.08);
   --border-strong: rgba(255, 255, 255, 0.16);
@@ -20,10 +28,9 @@
   --text-secondary: #a1a1aa;
   --text-tertiary: #71717a;
 
-  --accent-1: #22d3ee; /* 青 */
-  --accent-2: #a855f7; /* 紫 */
-  --accent-gradient: linear-gradient(135deg, #22d3ee 0%, #a855f7 100%);
-  --accent-glow: rgba(168, 85, 247, 0.4);
+  --accent-1: #22d3ee;
+  --accent-2: #22d3ee;
+  --accent-glow: rgba(34, 211, 238, 0.28);
 
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
   --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.4);
@@ -43,22 +50,26 @@
 }
 
 [data-theme='light'] {
-  --bg-base: #fafafa;
-  --bg-elevated: #ffffff;
-  --bg-card: #ffffff;
-  --bg-card-hover: #f4f4f5;
-  --bg-overlay: rgba(255, 255, 255, 0.85);
+  /* 浅色主题：暖纸面体系，与首页内容壳（content-shell）同族，
+     保证笔记页等二级页面与首页浅色区观感一致 */
+  --bg-base: #f5efe5;
+  --bg-section-alt: #ece4d3;
+  --bg-elevated: #fffdf8;
+  --bg-card: #fffdf8;
+  --bg-card-hover: #f1e9de;
+  --bg-overlay: rgba(245, 239, 229, 0.9);
 
-  --border: rgba(0, 0, 0, 0.08);
-  --border-strong: rgba(0, 0, 0, 0.16);
+  --border: rgba(55, 46, 35, 0.13);
+  --border-strong: rgba(55, 46, 35, 0.26);
 
-  --text-primary: #18181b;
-  --text-secondary: #3f3f46;
-  --text-tertiary: #71717a;
+  --text-primary: #1e272b;
+  --text-secondary: #505c60;
+  --text-tertiary: #77736c;
 
-  --accent-1: #0891b2;
-  --accent-2: #7c3aed;
-  --accent-glow: rgba(124, 58, 237, 0.25);
+  /* 浅底上 accent 降深以保证对比度（WCAG AA） */
+  --accent-1: #148ca5;
+  --accent-2: #148ca5;
+  --accent-glow: rgba(20, 140, 165, 0.18);
 
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
   --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.1);

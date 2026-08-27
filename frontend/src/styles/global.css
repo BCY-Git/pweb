@@ -52,13 +52,40 @@ img {
   display: block;
 }
 
-/* 渐变文字工具类 */
+/* 单色强调文字工具类 */
 .gradient-text {
-  background: var(--accent-gradient);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
+  color: var(--accent-1);
+}
+
+/* 首屏之后切换到暖纸面内容区（深浅分界 + 区间交替节奏）。
+   参考 legal/wedding 站：浅色内容区不是单一底色，而是「纸面 ↔ 暖沙」交替。 */
+.content-shell {
+  --bg-base: #f5efe5;
+  /* 交替区间底色：比纸面略深的暖沙色，柔和但有明确分区感 */
+  --bg-section-alt: #ece4d3;
+  --bg-elevated: #fffdf8;
+  --bg-card: #fffdf8;
+  --bg-card-hover: #f1e9de;
+  --bg-overlay: rgba(245, 239, 229, 0.9);
+  --border: rgba(55, 46, 35, 0.13);
+  --border-strong: rgba(55, 46, 35, 0.26);
+  --text-primary: #1e272b;
+  --text-secondary: #505c60;
+  --text-tertiary: #77736c;
+  --accent-1: #148ca5;
+  --accent-2: #148ca5;
+  --accent-glow: rgba(20, 140, 165, 0.18);
+  --shadow-sm: 0 2px 8px rgba(67, 52, 36, 0.08);
+  --shadow-md: 0 10px 28px rgba(67, 52, 36, 0.1);
+  --shadow-glow: 0 0 24px rgba(20, 140, 165, 0.1);
+  border-top: 8px solid #e9dfd1;
+  background: var(--bg-base);
+  color: var(--text-primary);
+}
+
+/* 区间交替：内容壳内偶数板块铺暖沙底色，形成阅读节奏 */
+.content-shell section.section:nth-of-type(even) {
+  background: var(--bg-section-alt);
 }
 
 /* 等宽字体工具类（技术标签、元信息） */

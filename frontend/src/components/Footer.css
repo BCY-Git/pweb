@@ -1,7 +1,9 @@
 .footer {
-  border-top: 1px solid var(--border);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
   padding: 32px 0;
-  background: var(--bg-base);
+  /* 固定深墨青黑（不随主题切换）：与深色 Hero 首尾呼应，
+     参考 legal 站的藏青 footer 手法 */
+  background: var(--bg-footer);
 }
 
 .footer__inner {
@@ -13,20 +15,20 @@
 }
 
 .footer__text {
-  color: var(--text-secondary);
+  color: var(--footer-text);
   font-size: 0.9rem;
 }
 
 .footer__text a {
-  color: var(--accent-1);
+  color: #22d3ee;
 }
 
 .footer__text a:hover {
-  color: var(--accent-2);
+  color: #67e8f9;
 }
 
 .footer__sub {
-  color: var(--text-tertiary);
+  color: var(--footer-text-dim);
   font-size: 0.8rem;
 }
 
