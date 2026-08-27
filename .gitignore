@@ -41,3 +41,8 @@ release/
 
 # 生产静态产物（前端 dist 拷贝，部署时生成）
 backend/public/
+
+# 本地工具产物
+.playwright-cli/
+output/
+tools/__pycache__/

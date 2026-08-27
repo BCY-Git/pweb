@@ -1,7 +1,7 @@
 {
   "name": "@martin-portfolio/api",
   "version": "0.1.0",
-  "description": "Martin's portfolio backend — NestJS + Prisma + SQLite",
+  "description": "鲍传宇个人网站后端 — NestJS + Prisma + SQLite",
   "private": true,
   "license": "MIT",
   "scripts": {
@@ -13,6 +13,7 @@
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main.js",
+    "predev": "prisma generate",
     "dev": "nest start --watch",
     "test": "jest --passWithNoTests",
     "test:watch": "jest --watch",

@@ -26,9 +26,9 @@ export function About({ profile, stats }: AboutProps) {
     },
     {
       icon: Code2,
-      end: 20,
+      end: 300,
       suffix: '+',
-      label: '版本迭代',
+      label: '自动化测试',
     },
   ]
 
@@ -38,31 +38,19 @@ export function About({ profile, stats }: AboutProps) {
         <AnimatedContent direction="right" distance={30} duration={0.5}>
           <div className="about__bio">
             <p>
-              我是一名专注于 <strong>AI Agent 全栈开发</strong> 的工程师，
-              热爱把想法落地成产品。擅长 React 前端工程化与 NestJS 后端架构，
-              对 LLM 应用集成、Agent 设计有实战经验。
+              我专注于 <strong>AI Agent 全栈开发</strong>，把模型调用构建为可控、
+              可中断、可恢复的工程链路。熟悉意图路由、工具调用编排、
+              Human-in-the-loop 与运行事件流观测。
             </p>
             <p>
-              我相信好的软件来自清晰的分层与持续的小步迭代
-              —— 这也是我在个人项目{' '}
-              <a
-                href="https://github.com/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="about__link"
-              >
-                MindTree
-              </a>{' '}
-              里坚持的原则：从 0.2 迭代到 1.20，20+ 个版本，
-              配套 30+ 篇设计文档，所有变更走命令层保证可撤销。
+              具备 RAG 混合检索、私有化模型接入与端到端系统交付经验；
+              在个人项目 <strong>MindTree</strong>{' '}
+              中，所有变更均通过 Command 系统执行，结合 Schema 校验、
+              版本检查与事务保障复杂交互下的数据一致性。
             </p>
             <p>
-              {profile?.location && (
-                <>
-                  <span className="mono">{profile.location}</span> · 基于 NestJS + React 构建
-                </>
-              )}
-              {!profile?.location && <>本站基于 NestJS + React 构建</>}
+              {profile?.location && <span className="mono">{profile.location} · </span>}
+              重视测试、密钥保护与保密环境的离线部署和现场交付。
             </p>
           </div>
         </AnimatedContent>

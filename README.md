@@ -1,4 +1,4 @@
-# Martin's Portfolio
+# 鲍传宇的个人网站
 
 > 个人简历展示站 — 面试官点开链接即可快速了解我的能力与项目。
 
@@ -62,4 +62,4 @@ docker compose up -d --build
 
 - **完整全栈链路**：前端 → REST API → Prisma → SQLite，体现 NestJS + React 工程能力
 - **规范工程化**：分层架构、全局管道/过滤器/拦截器、Swagger 文档、TS strict、容器化、CI
-- **重点项目**：[MindTree](https://github.com/) — 本地优先的 AI 思维导图工作空间（React 19 + Tauri + xyflow，20+ 版本迭代）
+- **核心项目**：AFSIM 智能仿真脚本研发 AI Agent 平台、MindTree 本地优先 AI 思维导图、虚拟战场综合系统平台

@@ -36,5 +36,5 @@ VOLUME ["/app/prisma"]
 
 EXPOSE 3000
 
-# 启动时执行迁移并 seed，然后起服务
-CMD ["sh", "-c", "pnpm exec prisma migrate deploy && node dist/main.js"]
+# 启动时执行迁移和编译后的种子脚本，确保持久化数据库也能同步内容更新。
+CMD ["sh", "-c", "pnpm exec prisma migrate deploy && node dist/prisma/seed.js && node dist/main.js"]

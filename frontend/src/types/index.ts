@@ -11,6 +11,9 @@ export interface Profile {
   githubUrl?: string | null
   giteeUrl?: string | null
   email?: string | null
+  phone?: string | null
+  wechatId?: string | null
+  blogUrl?: string | null
   wechatQrUrl?: string | null
   resumeUrl?: string | null
   location?: string | null

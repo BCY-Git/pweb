@@ -20,6 +20,9 @@ model Profile {
   githubUrl   String?
   giteeUrl    String?
   email       String?
+  phone       String?
+  wechatId    String?
+  blogUrl     String?
   wechatQrUrl String?
   resumeUrl   String? // 简历 PDF 下载链接
   location    String?

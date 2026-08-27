@@ -62,7 +62,7 @@ async function bootstrap() {
 
   // Swagger
   const swaggerConfig = new DocumentBuilder()
-    .setTitle('Martin Portfolio API')
+    .setTitle('鲍传宇个人网站 API')
     .setDescription('个人简历站后端接口文档')
     .setVersion('1.0')
     .build()

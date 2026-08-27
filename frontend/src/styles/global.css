@@ -24,6 +24,13 @@ body {
   -moz-osx-font-smoothing: grayscale;
   transition: background-color 0.3s ease, color 0.3s ease;
   overflow-x: hidden;
+  padding-bottom: 84px;
+}
+
+@media (max-width: 640px) {
+  body {
+    padding-bottom: 70px;
+  }
 }
 
 a {

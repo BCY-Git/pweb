@@ -1,5 +1,15 @@
 import { useState } from 'react'
-import { Check, Github, Globe, Mail, MessageSquare, Send } from 'lucide-react'
+import {
+  Check,
+  Github,
+  Globe,
+  Mail,
+  MessageCircle,
+  MessageSquare,
+  Phone,
+  Rss,
+  Send,
+} from 'lucide-react'
 import type { Profile } from '../types'
 import { api } from '../api'
 import { AnimatedContent } from '../components/AnimatedContent'
@@ -42,21 +52,24 @@ export function Contact({ profile }: ContactProps) {
     {
       icon: Mail,
       label: '邮箱',
-      value: profile?.email ?? 'martin@example.com',
+      value: profile?.email ?? '2097588616@qq.com',
       href: profile?.email ? `mailto:${profile.email}` : undefined,
     },
-    {
-      icon: Github,
-      label: 'GitHub',
-      value: 'github.com/martin',
-      href: profile?.githubUrl ?? 'https://github.com/',
-    },
-    {
-      icon: Globe,
-      label: 'Gitee',
-      value: 'gitee.com/martin',
-      href: profile?.giteeUrl ?? 'https://gitee.com/',
-    },
+    ...(profile?.phone
+      ? [{ icon: Phone, label: '电话', value: profile.phone, href: `tel:${profile.phone}` }]
+      : []),
+    ...(profile?.wechatId
+      ? [{ icon: MessageCircle, label: '微信', value: profile.wechatId }]
+      : []),
+    ...(profile?.blogUrl
+      ? [{ icon: Rss, label: 'CSDN 博客', value: 'Restart-AHTCM', href: profile.blogUrl }]
+      : []),
+    ...(profile?.githubUrl
+      ? [{ icon: Github, label: 'GitHub', value: 'GitHub 主页', href: profile.githubUrl }]
+      : []),
+    ...(profile?.giteeUrl
+      ? [{ icon: Globe, label: 'Gitee', value: 'Gitee 主页', href: profile.giteeUrl }]
+      : []),
   ]
 
   return (
@@ -75,9 +88,10 @@ export function Contact({ profile }: ContactProps) {
                     href={c.href ?? '#'}
                     target={c.href?.startsWith('http') ? '_blank' : undefined}
                     rel="noopener noreferrer"
-                    className={
-                      c.href ? 'contact__channel' : 'contact__channel contact__channel--disabled'
-                    }
+                    className={c.href ? 'contact__channel' : 'contact__channel contact__channel--disabled'}
+                    onClick={(event) => {
+                      if (!c.href) event.preventDefault()
+                    }}
                   >
                     <c.icon size={18} className="contact__channel-icon" />
                     <div>

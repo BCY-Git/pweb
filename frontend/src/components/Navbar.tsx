@@ -8,11 +8,13 @@ import {
 } from 'react'
 import { Github, Menu, Moon, Sun, X } from 'lucide-react'
 import { useTheme } from '../hooks/useTheme'
+import type { Profile } from '../types'
 import './Navbar.css'
 
 const NAV_ITEMS = [
   { href: '#hero', label: '首页' },
   { href: '#about', label: '关于' },
+  { href: '#experience', label: '经历' },
   { href: '#projects', label: '项目' },
   { href: '#skills', label: '技能' },
   { href: '#learning', label: '学习' },
@@ -41,7 +43,11 @@ type Particle = {
   color: string
 }
 
-export function Navbar() {
+interface NavbarProps {
+  profile: Profile | null
+}
+
+export function Navbar({ profile }: NavbarProps) {
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const [activeIndex, setActiveIndex] = useState(0)
@@ -51,6 +57,9 @@ export function Navbar() {
   const itemRefs = useRef<(HTMLAnchorElement | null)[]>([])
   const particleId = useRef(0)
   const particleTimer = useRef<number | null>(null)
+  const activeIndexRef = useRef(0)
+  const scrollSyncLockedRef = useRef(false)
+  const scrollSyncTimer = useRef<number | null>(null)
   const { theme, toggle } = useTheme()
 
   const updateIndicator = useCallback((index: number) => {
@@ -91,12 +100,22 @@ export function Navbar() {
 
   const activate = useCallback(
     (index: number, withBurst = false) => {
+      if (activeIndexRef.current === index) return
+
+      activeIndexRef.current = index
       setActiveIndex(index)
-      requestAnimationFrame(() => updateIndicator(index))
       if (withBurst) burst()
     },
-    [burst, updateIndicator],
+    [burst],
   )
+
+  const pauseScrollSync = useCallback(() => {
+    scrollSyncLockedRef.current = true
+    if (scrollSyncTimer.current) window.clearTimeout(scrollSyncTimer.current)
+    scrollSyncTimer.current = window.setTimeout(() => {
+      scrollSyncLockedRef.current = false
+    }, 900)
+  }, [])
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20)
@@ -105,8 +124,8 @@ export function Navbar() {
   }, [])
 
   useLayoutEffect(() => {
-    activate(activeIndex)
-  }, [activate, activeIndex])
+    updateIndicator(activeIndex)
+  }, [activeIndex, updateIndicator])
 
   useEffect(() => {
     const nav = navRef.current
@@ -123,6 +142,8 @@ export function Navbar() {
 
   useEffect(() => {
     const updateActiveFromScroll = () => {
+      if (scrollSyncLockedRef.current) return
+
       const readingLine = window.innerHeight * 0.32
       let nextIndex = 0
       NAV_ITEMS.forEach((item, index) => {
@@ -142,6 +163,7 @@ export function Navbar() {
   useEffect(
     () => () => {
       if (particleTimer.current) window.clearTimeout(particleTimer.current)
+      if (scrollSyncTimer.current) window.clearTimeout(scrollSyncTimer.current)
     },
     [],
   )
@@ -149,9 +171,19 @@ export function Navbar() {
   return (
     <header className={`navbar ${scrolled ? 'navbar--scrolled' : ''}`}>
       <div className="navbar__inner">
-        <a href="#hero" className="navbar__logo" onClick={() => setMobileOpen(false)}>
-          <span className="navbar__logo-mark">M</span>
-          <span className="navbar__logo-text">Martin</span>
+        <a
+          href="#hero"
+          className="navbar__logo"
+          aria-label={`返回首页 — ${profile?.name ?? '鲍传宇'}`}
+          onClick={() => setMobileOpen(false)}
+        >
+          <span className="navbar__logo-wordmark">
+            {profile?.name ?? '鲍传宇'}<span className="navbar__logo-dot" aria-hidden="true">.</span>
+          </span>
+          <span className="navbar__logo-role" aria-hidden="true">
+            <span>Full-stack</span>
+            <span>Engineer</span>
+          </span>
         </a>
 
         <div
@@ -192,6 +224,7 @@ export function Navbar() {
               className={activeIndex === index ? 'is-active' : ''}
               aria-current={activeIndex === index ? 'page' : undefined}
               onClick={() => {
+                pauseScrollSync()
                 activate(index, true)
                 setMobileOpen(false)
               }}
@@ -211,16 +244,18 @@ export function Navbar() {
           >
             {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
           </button>
-          <a
-            className="navbar__icon-btn"
-            href="https://github.com/"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="GitHub"
-            title="GitHub"
-          >
-            <Github size={18} />
-          </a>
+          {profile?.githubUrl && (
+            <a
+              className="navbar__icon-btn"
+              href={profile.githubUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="GitHub"
+              title="GitHub"
+            >
+              <Github size={18} />
+            </a>
+          )}
           <button
             className="navbar__icon-btn navbar__menu-btn"
             onClick={() => setMobileOpen((v) => !v)}

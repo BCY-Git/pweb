@@ -2,8 +2,10 @@ import { useEffect, useState, lazy, Suspense } from 'react'
 import { api } from './api'
 import { Footer } from './components/Footer'
 import { Navbar } from './components/Navbar'
+import { SiteDock } from './components/SiteDock'
 import { About } from './sections/About'
 import { Contact } from './sections/Contact'
+import { Experience } from './sections/Experience'
 import { Hero } from './sections/Hero'
 import { Learning } from './sections/Learning'
 import { Projects } from './sections/Projects'
@@ -59,10 +61,11 @@ export default function App() {
 
   return (
     <>
-      <Navbar />
+      <Navbar profile={profile} />
       <main>
         <Hero profile={profile} />
         <About profile={profile} stats={stats} />
+        <Experience />
         <Projects projects={projects} />
         <Skills groups={skills} />
         <Learning />
@@ -75,7 +78,8 @@ export default function App() {
         </Suspense>
         <Contact profile={profile} />
       </main>
-      <Footer />
+      <Footer profile={profile} />
+      <SiteDock />
     </>
   )
 }

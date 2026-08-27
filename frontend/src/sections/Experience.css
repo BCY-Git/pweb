@@ -1,0 +1,137 @@
+.experience {
+  display: grid;
+  gap: 44px;
+}
+
+.experience__kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--accent-1);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+}
+
+.experience__education {
+  padding: 28px 0;
+  border-top: 1px solid var(--border-strong);
+  border-bottom: 1px solid var(--border);
+}
+
+.experience__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+  margin-top: 14px;
+}
+
+.experience__header h3 {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: clamp(1.05rem, 2.2vw, 1.35rem);
+}
+
+.experience__header p,
+.experience__awards p,
+.experience__job li {
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+.experience__header p {
+  margin: 6px 0 0;
+}
+
+.experience time {
+  flex: 0 0 auto;
+  color: var(--text-tertiary);
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  white-space: nowrap;
+}
+
+.experience__awards {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+}
+
+.experience__awards svg {
+  flex: 0 0 auto;
+  margin-top: 5px;
+  color: var(--accent-2);
+}
+
+.experience__awards p {
+  margin: 0;
+}
+
+.experience__work {
+  display: grid;
+  gap: 18px;
+}
+
+.experience__job {
+  position: relative;
+  padding: 4px 0 4px 28px;
+}
+
+.experience__line {
+  position: absolute;
+  top: 10px;
+  bottom: -22px;
+  left: 4px;
+  width: 1px;
+  background: var(--border-strong);
+}
+
+.experience__job:last-child .experience__line {
+  bottom: 44%;
+}
+
+.experience__line::before {
+  content: '';
+  position: absolute;
+  top: 1px;
+  left: -4px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--accent-1);
+  box-shadow: 0 0 0 5px var(--bg-base);
+}
+
+.experience__job ul {
+  display: grid;
+  gap: 8px;
+  margin: 18px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.experience__job li {
+  position: relative;
+  padding-left: 16px;
+}
+
+.experience__job li::before {
+  content: '—';
+  position: absolute;
+  left: 0;
+  color: var(--accent-1);
+}
+
+@media (max-width: 640px) {
+  .experience {
+    gap: 34px;
+  }
+
+  .experience__header {
+    flex-direction: column;
+    gap: 8px;
+  }
+}

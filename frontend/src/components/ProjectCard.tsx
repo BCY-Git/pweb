@@ -24,7 +24,7 @@ export function ProjectCard({ project, featured = false, index = 0 }: ProjectCar
         color="rgba(34, 211, 238, 0.06)"
       >
         <article>
-          {featured && <span className="project-card__badge">★ 重点项目</span>}
+          {featured && <span className="project-card__badge">★ 核心项目</span>}
 
           <div className="project-card__head">
             <h3 className="project-card__name">{project.name}</h3>

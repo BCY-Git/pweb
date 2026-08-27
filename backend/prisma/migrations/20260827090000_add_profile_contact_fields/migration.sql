@@ -1,0 +1,3 @@
+ALTER TABLE "Profile" ADD COLUMN "phone" TEXT;
+ALTER TABLE "Profile" ADD COLUMN "wechatId" TEXT;
+ALTER TABLE "Profile" ADD COLUMN "blogUrl" TEXT;

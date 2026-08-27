@@ -24,7 +24,7 @@ const NAME_COLORS = {
 } as const
 
 export function Hero({ profile }: HeroProps) {
-  const name = profile?.name ?? 'Martin'
+  const name = profile?.name ?? '鲍传宇'
   const title = profile?.title ?? 'AI Agent 全栈开发工程师'
   const theme = useTheme((s) => s.theme)
   const dotColors = DOT_COLORS[theme]
@@ -101,7 +101,7 @@ export function Hero({ profile }: HeroProps) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.3 }}
         >
-          专注 React 前端工程化与 NestJS 后端架构，热爱把想法落地成产品。
+          把 Agent、RAG 与本机能力集成为可控、可中断、可恢复的工程链路。
         </motion.p>
 
         <motion.div

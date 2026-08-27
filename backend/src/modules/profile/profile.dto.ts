@@ -26,6 +26,15 @@ export class ProfileDto {
   email?: string | null
 
   @ApiPropertyOptional()
+  phone?: string | null
+
+  @ApiPropertyOptional()
+  wechatId?: string | null
+
+  @ApiPropertyOptional()
+  blogUrl?: string | null
+
+  @ApiPropertyOptional()
   wechatQrUrl?: string | null
 
   @ApiPropertyOptional()
