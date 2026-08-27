@@ -206,12 +206,19 @@ export function Blog({ overview, trend, articles }: BlogProps) {
   const trendRef = useEChart(trendOption)
   const topRef = useEChart(topOption)
 
-  const recent = useMemo(
+  // 暂不在个人站展示的系列文章；保留在 CSDN 原站，不影响同步数据与统计。
+  const hiddenArticleIds = useMemo(
+    () => new Set(['161294629', '161265637', '161259229']),
+    [],
+  )
+
+  const featuredArticles = useMemo(
     () =>
       [...articles]
-        .sort((a, b) => b.postTime.localeCompare(a.postTime))
+        .filter((article) => !hiddenArticleIds.has(article.articleId))
+        .sort((a, b) => b.viewCount - a.viewCount || b.postTime.localeCompare(a.postTime))
         .slice(0, 5),
-    [articles],
+    [articles, hiddenArticleIds],
   )
 
   if (!latest) {
@@ -306,12 +313,12 @@ export function Blog({ overview, trend, articles }: BlogProps) {
           )}
         </div>
 
-        {/* 最新文章 */}
-        {recent.length > 0 && (
+        {/* 精选文章：按阅读量排序，优先展示代表作。 */}
+        {featuredArticles.length > 0 && (
           <div className="blog-recent">
-            <h3 className="blog-chart__title">最新发布</h3>
+            <h3 className="blog-chart__title">精选文章（按阅读量）</h3>
             <ul className="blog-recent__list">
-              {recent.map((a) => (
+              {featuredArticles.map((a) => (
                 <li key={a.articleId}>
                   <a
                     href={a.url}

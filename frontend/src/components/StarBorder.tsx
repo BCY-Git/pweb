@@ -13,10 +13,7 @@ interface StarBorderProps {
 }
 
 /**
- * React Bits StarBorder —— 光点沿按钮边框持续绕行。
- *
- * 用 CSS conic-gradient + @property --angle 旋转实现，
- * 一个亮点绕着边框跑。纯 CSS 动画，性能极好。
+ * React Bits StarBorder —— 使用单色细边框强调主操作。
  */
 export function StarBorder({
   children,

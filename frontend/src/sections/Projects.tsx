@@ -1,4 +1,5 @@
 import type { Project } from '../types'
+import { CardSwap } from '../components/CardSwap'
 import { ProjectCard } from '../components/ProjectCard'
 import { Section } from '../components/Section'
 import './Projects.css'
@@ -8,31 +9,24 @@ interface ProjectsProps {
 }
 
 export function Projects({ projects }: ProjectsProps) {
-  // 重点项目单独大卡片展示，其余走网格
-  const featured = projects.filter((p) => p.isFeatured)
-  const others = projects.filter((p) => !p.isFeatured)
-
   return (
     <Section id="projects" title="项目经历" subtitle="projects">
-      {featured.length > 0 && (
-        <div className="projects__featured">
-          {featured.map((p, i) => (
-            <ProjectCard key={p.id} project={p} featured index={i} />
-          ))}
-        </div>
-      )}
-
-      {others.length > 0 && (
-        <>
-          {featured.length > 0 && (
-            <p className="projects__group-label mono">// 其他参与项目</p>
-          )}
-          <div className="projects__grid">
-            {others.map((p, i) => (
-              <ProjectCard key={p.id} project={p} index={i} />
-            ))}
+      {projects.length > 0 && (
+        <div className="projects__deck">
+          <div className="projects__deck-copy">
+            <p className="mono">// SELECTED WORK</p>
+            <span>卡片会自动切换；悬停可暂停阅读。</span>
           </div>
-        </>
+          <CardSwap delay={2000}>
+            {projects.map((project) => (
+              <ProjectCard
+                key={project.id}
+                project={project}
+                featured={project.isFeatured}
+              />
+            ))}
+          </CardSwap>
+        </div>
       )}
 
       {projects.length === 0 && (

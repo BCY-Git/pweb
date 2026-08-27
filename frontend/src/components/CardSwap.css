@@ -1,0 +1,47 @@
+.card-swap {
+  position: relative;
+  width: min(var(--card-width), calc(100vw - 64px));
+  height: calc(var(--card-height) + 100px);
+  margin: 0 auto;
+  perspective: 900px;
+  transform-style: preserve-3d;
+}
+
+.card-swap__item {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(var(--card-width), calc(100vw - 64px));
+  height: var(--card-height);
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.card-swap__card {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  background: var(--bg-card);
+  box-shadow: var(--shadow-md);
+  backface-visibility: hidden;
+}
+
+@media (max-width: 640px) {
+  .card-swap {
+    width: min(var(--card-width), calc(100vw - 36px));
+    height: calc(var(--card-height) * 0.82 + 84px);
+  }
+
+  .card-swap__item {
+    width: min(var(--card-width), calc(100vw - 36px));
+    height: calc(var(--card-height) * 0.82);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card-swap__item:not(:first-child) {
+    display: none;
+  }
+}

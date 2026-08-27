@@ -64,19 +64,21 @@ export default function App() {
       <Navbar profile={profile} />
       <main>
         <Hero profile={profile} />
-        <About profile={profile} stats={stats} />
-        <Experience />
-        <Projects projects={projects} />
-        <Skills groups={skills} />
-        <Learning />
-        <Suspense fallback={null}>
-          <Blog
-            overview={csdnOverview}
-            trend={csdnTrend}
-            articles={csdnArticles}
-          />
-        </Suspense>
-        <Contact profile={profile} />
+        <div className="content-shell">
+          <About profile={profile} stats={stats} />
+          <Suspense fallback={null}>
+            <Blog
+              overview={csdnOverview}
+              trend={csdnTrend}
+              articles={csdnArticles}
+            />
+          </Suspense>
+          <Experience />
+          <Projects projects={projects} />
+          <Skills groups={skills} />
+          <Learning />
+          <Contact profile={profile} />
+        </div>
       </main>
       <Footer profile={profile} />
       <SiteDock />

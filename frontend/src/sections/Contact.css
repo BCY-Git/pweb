@@ -112,7 +112,7 @@
   font-weight: 500;
   font-size: 0.95rem;
   color: white;
-  background: var(--accent-gradient);
+  background: var(--accent-1);
   transition: all 0.25s ease;
   margin-top: 4px;
 }

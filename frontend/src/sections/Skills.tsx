@@ -20,28 +20,25 @@ const CATEGORY_LABELS: Record<string, string> = {
 
 export function Skills({ groups }: SkillsProps) {
   const wallItems = useMemo<DriftWallItem[]>(() => {
-    const colors: Record<string, [string, string]> = {
-      frontend: ['#155e75', '#4f46e5'],
-      backend: ['#4338ca', '#7e22ce'],
-      database: ['#0f766e', '#0369a1'],
-      devops: ['#9a3412', '#be185d'],
-      ai: ['#6d28d9', '#0891b2'],
+    const colors: Record<string, string> = {
+      frontend: '#155e75',
+      backend: '#2563a8',
+      database: '#0f766e',
+      devops: '#a16207',
+      ai: '#16829a',
     }
 
     return groups.flatMap((group, groupIndex) =>
       group.items.map((item, itemIndex) => {
-        const [start, end] = colors[group.category] ?? ['#155e75', '#7e22ce']
+        const color = colors[group.category] ?? '#155e75'
         const offset = (groupIndex * 19 + itemIndex * 13) % 72
         const artwork = encodeURIComponent(`
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 240" fill="none">
             <defs>
-              <linearGradient id="g" x1="0" y1="0" x2="360" y2="240" gradientUnits="userSpaceOnUse">
-                <stop stop-color="${start}"/><stop offset="1" stop-color="${end}"/>
-              </linearGradient>
               <filter id="b"><feGaussianBlur stdDeviation="22"/></filter>
             </defs>
             <rect width="360" height="240" fill="#080b14"/>
-            <rect width="360" height="240" fill="url(#g)" opacity=".78"/>
+            <rect width="360" height="240" fill="${color}" opacity=".78"/>
             <circle cx="${80 + offset}" cy="58" r="70" fill="#67e8f9" opacity=".48" filter="url(#b)"/>
             <circle cx="${294 - offset}" cy="192" r="88" fill="#c084fc" opacity=".4" filter="url(#b)"/>
             <path d="M-24 188C78 ${116 - offset} 168 ${256 + offset} 384 64" stroke="white" stroke-opacity=".22" stroke-width="1"/>

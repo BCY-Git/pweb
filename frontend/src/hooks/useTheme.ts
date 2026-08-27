@@ -11,13 +11,12 @@ interface ThemeStore {
 
 const THEME_KEY = 'portfolio-theme'
 
-/** 读取初始主题：localStorage > 系统偏好 > 默认深色 */
+/** 读取初始主题：localStorage > 默认深色。 */
 function getInitialTheme(): Theme {
   if (typeof window === 'undefined') return 'dark'
   const saved = localStorage.getItem(THEME_KEY) as Theme | null
   if (saved === 'dark' || saved === 'light') return saved
-  const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches
-  return prefersLight ? 'light' : 'dark'
+  return 'dark'
 }
 
 export const useTheme = create<ThemeStore>((set, get) => ({

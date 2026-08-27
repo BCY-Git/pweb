@@ -11,7 +11,7 @@ const toJson = (items: string[]) => JSON.stringify(items)
 
 async function main() {
   const profile = {
-    name: '鲍传宇',
+    name: 'BCY',
     title: 'AI Agent 全栈开发工程师',
     bio: [
       '## 关于我',

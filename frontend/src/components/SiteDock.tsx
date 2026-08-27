@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import {
   BookOpen,
   Braces,
@@ -12,18 +12,24 @@ import {
   UserRound,
 } from 'lucide-react'
 import { useTheme } from '../hooks/useTheme'
+import { useLanguage } from '../hooks/useLanguage'
 import Dock, { type DockItemData } from './Dock'
 
 const SECTIONS = [
-  { id: 'hero', label: '首页', icon: Home },
-  { id: 'about', label: '关于', icon: UserRound },
-  { id: 'experience', label: '经历', icon: BriefcaseBusiness },
-  { id: 'projects', label: '项目', icon: FolderKanban },
-  { id: 'skills', label: '技能', icon: Braces },
-  { id: 'learning', label: '学习', icon: BookOpen },
-  { id: 'blog', label: '博客', icon: Rss },
-  { id: 'contact', label: '联系', icon: Send },
+  { id: 'hero', icon: Home },
+  { id: 'about', icon: UserRound },
+  { id: 'blog', icon: Rss },
+  { id: 'experience', icon: BriefcaseBusiness },
+  { id: 'projects', icon: FolderKanban },
+  { id: 'skills', icon: Braces },
+  { id: 'learning', icon: BookOpen },
+  { id: 'contact', icon: Send },
 ] as const
+
+const SECTION_LABELS = {
+  zh: ['首页', '关于', '博客', '经历', '项目', '技能', '学习', '联系'],
+  en: ['Home', 'About', 'Blog', 'Experience', 'Work', 'Skills', 'Notes', 'Contact'],
+} as const
 
 function scrollToSection(id: string) {
   document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
@@ -36,13 +42,18 @@ export function SiteDock() {
     window.matchMedia('(max-width: 640px)').matches,
   )
   const { theme, toggle } = useTheme()
+  const language = useLanguage((s) => s.language)
+  const sections = useMemo(
+    () => SECTIONS.map((section, index) => ({ ...section, label: SECTION_LABELS[language][index] })),
+    [language],
+  )
 
   useEffect(() => {
     const updateActiveSection = () => {
       const threshold = window.innerHeight * 0.38
       let current: (typeof SECTIONS)[number]['id'] = SECTIONS[0].id
 
-      for (const section of SECTIONS) {
+      for (const section of sections) {
         const element = document.getElementById(section.id)
         if (element && element.getBoundingClientRect().top <= threshold) {
           current = section.id
@@ -59,7 +70,7 @@ export function SiteDock() {
       window.removeEventListener('scroll', updateActiveSection)
       window.removeEventListener('resize', updateActiveSection)
     }
-  }, [])
+  }, [sections])
 
   useEffect(() => {
     const media = window.matchMedia('(max-width: 640px)')
@@ -69,7 +80,7 @@ export function SiteDock() {
   }, [])
 
   const items: DockItemData[] = [
-    ...SECTIONS.map(({ id, label, icon: Icon }) => ({
+    ...sections.map(({ id, label, icon: Icon }) => ({
       label,
       icon: <Icon size={compact ? 17 : 19} strokeWidth={1.8} />,
       active: activeSection === id,

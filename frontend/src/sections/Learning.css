@@ -42,9 +42,8 @@
   height: 76px;
   place-content: center;
   border-radius: 50%;
-  background:
-    radial-gradient(circle at center, var(--bg-base) 61%, transparent 62%),
-    conic-gradient(var(--accent-1) var(--progress), var(--border) 0);
+  border: 3px solid var(--accent-1);
+  background: var(--bg-card);
   text-align: center;
 }
 

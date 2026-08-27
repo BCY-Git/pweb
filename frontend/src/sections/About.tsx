@@ -38,19 +38,20 @@ export function About({ profile, stats }: AboutProps) {
         <AnimatedContent direction="right" distance={30} duration={0.5}>
           <div className="about__bio">
             <p>
-              我专注于 <strong>AI Agent 全栈开发</strong>，把模型调用构建为可控、
-              可中断、可恢复的工程链路。熟悉意图路由、工具调用编排、
-              Human-in-the-loop 与运行事件流观测。
+              我专注于 <strong>AI Agent 全栈开发</strong>，具备扎实的数据结构与常见算法基础；
+              能够把模型调用、本机能力和业务系统组织成可控、可中断、可恢复的工程链路。
             </p>
             <p>
-              具备 RAG 混合检索、私有化模型接入与端到端系统交付经验；
-              在个人项目 <strong>MindTree</strong>{' '}
-              中，所有变更均通过 Command 系统执行，结合 Schema 校验、
-              版本检查与事务保障复杂交互下的数据一致性。
+              在最近负责的<strong>千万级项目</strong>中，我作为当前唯一 Owner 持续维护超过 6 个月，
+              覆盖现场部署、交付和问题闭环；该项目获得公司<strong>年度最佳项目奖金</strong>。
             </p>
             <p>
-              {profile?.location && <span className="mono">{profile.location} · </span>}
-              重视测试、密钥保护与保密环境的离线部署和现场交付。
+              前端侧负责从 0 到 1 的架构设计与工程落地，是前端 Owner；后端侧主要负责业务逻辑的迭代与修改，
+              能够在前后端协作、现场环境与交付节点之间推进复杂项目。
+            </p>
+            <p>
+              具备 RAG 混合检索、私有化模型接入与端到端系统交付经验，重视测试、密钥保护与保密环境下的部署质量。
+              {profile?.location && <span className="mono"> {profile.location}</span>}
             </p>
           </div>
         </AnimatedContent>

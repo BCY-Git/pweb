@@ -95,7 +95,7 @@ async function bootstrap() {
 
   // Swagger 文档（生产也保留，方便查看）
   const swaggerConfig = new DocumentBuilder()
-    .setTitle('鲍传宇个人网站 API')
+    .setTitle('BCY 个人网站 API')
     .setDescription('个人简历站后端接口文档')
     .setVersion('1.0')
     .build()

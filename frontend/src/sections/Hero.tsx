@@ -3,7 +3,6 @@ import { ArrowRight, ChevronDown, Mail } from 'lucide-react'
 import DotGrid from '../components/DotGrid'
 import ParticleText from '../components/ParticleText'
 import { StarBorder } from '../components/StarBorder'
-import { useTheme } from '../hooks/useTheme'
 import type { Profile } from '../types'
 import './Hero.css'
 
@@ -11,24 +10,20 @@ interface HeroProps {
   profile: Profile | null
 }
 
-/** DotGrid 配色随主题切换：深色底用暗灰点+青色点亮，浅色底用浅灰点+深青点亮 */
+/** 首屏始终为深色，以便与下方暖白内容区形成清晰层次。 */
 const DOT_COLORS = {
   dark: { baseColor: '#2b2b38', activeColor: '#22d3ee' },
-  light: { baseColor: '#dcdce4', activeColor: '#0891b2' },
 } as const
 
-/** 姓名粒子配色随主题切换：浅色主题用深灰粒子保证可读 */
 const NAME_COLORS = {
   dark: { color: '#e4e4e7', highlightColor: '#22d3ee' },
-  light: { color: '#3f3f46', highlightColor: '#0891b2' },
 } as const
 
 export function Hero({ profile }: HeroProps) {
-  const name = profile?.name ?? '鲍传宇'
+  const name = profile?.name ?? 'BCY'
   const title = profile?.title ?? 'AI Agent 全栈开发工程师'
-  const theme = useTheme((s) => s.theme)
-  const dotColors = DOT_COLORS[theme]
-  const nameColors = NAME_COLORS[theme]
+  const dotColors = DOT_COLORS.dark
+  const nameColors = NAME_COLORS.dark
 
   return (
     <section id="hero" className="hero">

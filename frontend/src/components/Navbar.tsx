@@ -7,20 +7,33 @@ import {
   type CSSProperties,
 } from 'react'
 import { Github, Menu, Moon, Sun, X } from 'lucide-react'
+import { useLanguage, type Language } from '../hooks/useLanguage'
 import { useTheme } from '../hooks/useTheme'
 import type { Profile } from '../types'
 import './Navbar.css'
 
-const NAV_ITEMS = [
-  { href: '#hero', label: '首页' },
-  { href: '#about', label: '关于' },
-  { href: '#experience', label: '经历' },
-  { href: '#projects', label: '项目' },
-  { href: '#skills', label: '技能' },
-  { href: '#learning', label: '学习' },
-  { href: '#blog', label: '博客' },
-  { href: '#contact', label: '联系' },
-]
+const NAV_ITEMS: Record<Language, { href: string; label: string }[]> = {
+  zh: [
+    { href: '#hero', label: '首页' },
+    { href: '#about', label: '关于' },
+    { href: '#blog', label: '博客' },
+    { href: '#experience', label: '经历' },
+    { href: '#projects', label: '项目' },
+    { href: '#skills', label: '技能' },
+    { href: '#learning', label: '学习' },
+    { href: '#contact', label: '联系' },
+  ],
+  en: [
+    { href: '#hero', label: 'Home' },
+    { href: '#about', label: 'About' },
+    { href: '#blog', label: 'Blog' },
+    { href: '#experience', label: 'Experience' },
+    { href: '#projects', label: 'Work' },
+    { href: '#skills', label: 'Skills' },
+    { href: '#learning', label: 'Notes' },
+    { href: '#contact', label: 'Contact' },
+  ],
+}
 
 // 与 GooeyNav 示例的 `colors={[1, 2, 3, 1, 2, 3, 1, 4]}` 对应。
 // 白色胶囊保留为主视觉，粒子使用源码示例中的白／靛蓝／洋红层次。
@@ -61,6 +74,8 @@ export function Navbar({ profile }: NavbarProps) {
   const scrollSyncLockedRef = useRef(false)
   const scrollSyncTimer = useRef<number | null>(null)
   const { theme, toggle } = useTheme()
+  const { language, toggle: toggleLanguage } = useLanguage()
+  const navItems = NAV_ITEMS[language]
 
   const updateIndicator = useCallback((index: number) => {
     const nav = navRef.current
@@ -146,7 +161,7 @@ export function Navbar({ profile }: NavbarProps) {
 
       const readingLine = window.innerHeight * 0.32
       let nextIndex = 0
-      NAV_ITEMS.forEach((item, index) => {
+      navItems.forEach((item, index) => {
         const section = document.querySelector(item.href)
         if (section && section.getBoundingClientRect().top <= readingLine) {
           nextIndex = index
@@ -158,7 +173,7 @@ export function Navbar({ profile }: NavbarProps) {
     updateActiveFromScroll()
     window.addEventListener('scroll', updateActiveFromScroll, { passive: true })
     return () => window.removeEventListener('scroll', updateActiveFromScroll)
-  }, [activate])
+  }, [activate, navItems])
 
   useEffect(
     () => () => {
@@ -174,11 +189,11 @@ export function Navbar({ profile }: NavbarProps) {
         <a
           href="#hero"
           className="navbar__logo"
-          aria-label={`返回首页 — ${profile?.name ?? '鲍传宇'}`}
+          aria-label={language === 'zh' ? `返回首页 — ${profile?.name ?? 'BCY'}` : `Back to home — ${profile?.name ?? 'BCY'}`}
           onClick={() => setMobileOpen(false)}
         >
           <span className="navbar__logo-wordmark">
-            {profile?.name ?? '鲍传宇'}<span className="navbar__logo-dot" aria-hidden="true">.</span>
+            {profile?.name ?? 'BCY'}<span className="navbar__logo-dot" aria-hidden="true">.</span>
           </span>
           <span className="navbar__logo-role" aria-hidden="true">
             <span>Full-stack</span>
@@ -213,8 +228,8 @@ export function Navbar({ profile }: NavbarProps) {
               ))}
             </span>
           )}
-          <nav aria-label="主导航">
-          {NAV_ITEMS.map((item, index) => (
+          <nav aria-label={language === 'zh' ? '主导航' : 'Primary navigation'}>
+          {navItems.map((item, index) => (
             <a
               key={item.href}
               href={item.href}
@@ -243,6 +258,15 @@ export function Navbar({ profile }: NavbarProps) {
             title="切换明暗主题"
           >
             {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+          </button>
+          <button
+            className="navbar__language-btn"
+            onClick={toggleLanguage}
+            aria-label={language === 'zh' ? 'Switch to English navigation' : '切换为中文导航'}
+            title={language === 'zh' ? 'Switch to English' : '切换为中文'}
+          >
+            <span className={language === 'zh' ? 'is-active' : undefined}>中</span>
+            <span className={language === 'en' ? 'is-active' : undefined}>EN</span>
           </button>
           {profile?.githubUrl && (
             <a
