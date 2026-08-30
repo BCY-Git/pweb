@@ -6,10 +6,10 @@
       "description": "按专题记录核心知识点、通用技巧与易错点，持续更新中",
       "status": "进行中",
       "topicsTotal": 8,
-      "topicsDone": 3,
-      "problemCount": 59,
+      "topicsDone": 6,
+      "problemCount": 60,
       "tags": ["算法", "JavaScript", "面试准备"],
-      "updatedAt": "2026-08-28"
+      "updatedAt": "2026-08-30"
     }
   ]
 }
