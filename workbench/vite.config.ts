@@ -12,6 +12,7 @@ export default defineConfig({
     emptyOutDir: true,
   },
   server: {
+    port: 5174, // 网站占了 5173，工作台固定 5174
     // 开发时把 /api 请求转发给 Express 后端（Vue CLI 里类似的配置叫 devServer.proxy）
     proxy: {
       '/api': 'http://localhost:3001',
