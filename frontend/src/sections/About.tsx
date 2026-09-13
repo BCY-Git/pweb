@@ -1,16 +1,16 @@
 import { Code2, FolderGit2, Layers } from 'lucide-react'
-import type { Profile, ProjectStats } from '../types'
+import type { ProjectStats } from '../types'
+import Scanner from '../components/Scanner'
 import { AnimatedContent } from '../components/AnimatedContent'
 import { CountUp } from '../components/CountUp'
 import { Section } from '../components/Section'
 import './About.css'
 
 interface AboutProps {
-  profile: Profile | null
   stats: ProjectStats | null
 }
 
-export function About({ profile, stats }: AboutProps) {
+export function About({ stats }: AboutProps) {
   const cards = [
     {
       icon: FolderGit2,
@@ -33,25 +33,33 @@ export function About({ profile, stats }: AboutProps) {
   ]
 
   return (
-    <Section id="about" title="关于我" subtitle="about">
+    <Section
+      id="about"
+      title="关于我"
+      subtitle="about"
+      tone="paper"
+      background={
+        /* 整板块 WebGL 背景：贴着 paper 色调的青色扫描线，置于内容之下 */
+        <Scanner
+          color1="#0f6e82"
+          color2="#148ca5"
+          color3="#f2ede2"
+          speed={0.4}
+          opacity={0.55}
+          grainIntensity={0.03}
+          mouseInteraction={false}
+        />
+      }
+    >
       <div className="about">
         <AnimatedContent direction="right" distance={30} duration={0.5}>
           <div className="about__bio">
             <p>
-              我专注于 <strong>AI Agent 全栈开发</strong>，具备扎实的数据结构与常见算法基础；
-              能够把模型调用、本机能力和业务系统组织成可控、可中断、可恢复的工程链路。
-            </p>
-            <p>
-              在最近负责的<strong>千万级项目</strong>中，我作为当前唯一 Owner 持续维护超过 6 个月，
-              覆盖现场部署、交付和问题闭环；该项目获得公司<strong>年度最佳项目奖金</strong>。
-            </p>
-            <p>
-              前端侧负责从 0 到 1 的架构设计与工程落地，是前端 Owner；后端侧主要负责业务逻辑的迭代与修改，
-              能够在前后端协作、现场环境与交付节点之间推进复杂项目。
-            </p>
-            <p>
-              具备 RAG 混合检索、私有化模型接入与端到端系统交付经验，重视测试、密钥保护与保密环境下的部署质量。
-              {profile?.location && <span className="mono"> {profile.location}</span>}
+              我习惯以<strong>“工程化”</strong>的方式学习：不为学而学，而是带着真实问题进入新领域，
+              再把学到的东西沉淀为可复用的资产。前端是我从零自学并独立负责的方向——从架构设计到工程落地，
+              支撑起<strong>千万级项目</strong>的交付；后端与 AI 侧，我主动扩展到 Agent、RAG 混合检索与私有化模型接入，
+              把新能力快速组织成可控、可中断、可恢复的工程链路。我也坚持系统化的基础训练，
+              用带进度追踪的笔记把学习拆解为可追溯、可复盘的过程。
             </p>
           </div>
         </AnimatedContent>

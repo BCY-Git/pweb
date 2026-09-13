@@ -37,15 +37,13 @@ type ECOption = ComposeOption<
   | LegendComponentOption
 >
 
-/** 读取 CSS 变量作为图表配色（主题切换后重新挂载生效） */
+/** 博客区固定在雾蓝数据底色，图表使用对应的高对比单色调。 */
 function chartColors() {
-  const css = getComputedStyle(document.documentElement)
-  const v = (name: string) => css.getPropertyValue(name).trim()
   return {
-    accent1: v('--accent-1') || '#22d3ee',
-    accent2: v('--accent-2') || '#a855f7',
-    text: v('--text-secondary') || '#a1a1aa',
-    border: v('--border') || 'rgba(255,255,255,0.08)',
+    accent1: '#117e94',
+    accent2: '#117e94',
+    text: '#476167',
+    border: 'rgba(25, 56, 64, 0.15)',
   }
 }
 
@@ -134,16 +132,7 @@ export function Blog({ overview, trend, articles }: BlogProps) {
           data: trend.map((s) => s.totalViews),
           lineStyle: { color: c.accent1, width: 2 },
           itemStyle: { color: c.accent1 },
-          areaStyle: {
-            color: {
-              type: 'linear',
-              x: 0, y: 0, x2: 0, y2: 1,
-              colorStops: [
-                { offset: 0, color: `${c.accent1}55` },
-                { offset: 1, color: `${c.accent1}00` },
-              ],
-            },
-          },
+          areaStyle: { color: `${c.accent1}22` },
         },
         {
           name: '粉丝数',
@@ -186,17 +175,7 @@ export function Blog({ overview, trend, articles }: BlogProps) {
           type: 'bar',
           data: top.map((a) => a.viewCount),
           barWidth: 14,
-          itemStyle: {
-            borderRadius: [0, 7, 7, 0],
-            color: {
-              type: 'linear',
-              x: 0, y: 0, x2: 1, y2: 0,
-              colorStops: [
-                { offset: 0, color: c.accent1 },
-                { offset: 1, color: c.accent2 },
-              ],
-            },
-          },
+          itemStyle: { borderRadius: [0, 7, 7, 0], color: c.accent1 },
           label: { show: true, position: 'right', color: c.text },
         },
       ],
@@ -223,7 +202,7 @@ export function Blog({ overview, trend, articles }: BlogProps) {
 
   if (!latest) {
     return (
-      <Section id="blog" title="技术博客" subtitle="csdn blog">
+      <Section id="blog" title="技术博客" subtitle="csdn blog" tone="data">
         <div className="blog-empty" role="status">
           <FileText size={22} aria-hidden="true" />
           <div>
@@ -260,7 +239,7 @@ export function Blog({ overview, trend, articles }: BlogProps) {
   ]
 
   return (
-    <Section id="blog" title="技术博客" subtitle="csdn blog">
+    <Section id="blog" title="技术博客" subtitle="csdn blog" tone="data">
       <motion.div
         className="blog"
         initial={{ opacity: 0, y: 24 }}

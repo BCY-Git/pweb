@@ -6,7 +6,7 @@ import {
   useTransform,
   type MotionValue,
   type SpringOptions,
-} from 'motion/react'
+} from 'framer-motion'
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import './Dock.css'
 

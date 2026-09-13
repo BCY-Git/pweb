@@ -12,12 +12,6 @@
   margin-bottom: 18px;
 }
 
-.about__bio p:last-child {
-  margin-bottom: 0;
-  color: var(--text-tertiary);
-  font-size: 0.9rem;
-}
-
 .about__bio strong {
   color: var(--text-primary);
 }

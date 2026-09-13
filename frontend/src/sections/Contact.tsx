@@ -73,7 +73,7 @@ export function Contact({ profile }: ContactProps) {
   ]
 
   return (
-    <Section id="contact" title="联系我" subtitle="contact">
+    <Section id="contact" title="联系我" subtitle="contact" tone="sand">
       <div className="contact">
         <AnimatedContent direction="right" distance={30} duration={0.5}>
           <div className="contact__info">

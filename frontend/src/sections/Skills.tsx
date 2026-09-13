@@ -55,7 +55,7 @@ export function Skills({ groups }: SkillsProps) {
   }, [groups])
 
   return (
-    <Section id="skills" title="技能栈" subtitle="skills">
+    <Section id="skills" title="技能栈" subtitle="skills" tone="cool">
       <motion.div
         className="skills-wall"
         initial={{ opacity: 0, y: 24 }}

@@ -464,10 +464,15 @@ const ParticleText = ({
       pointer.x = event.clientX - rect.left
       pointer.y = event.clientY - rect.top
       pointer.active = true
+      // 初始聚拢结束且 idleDrift 为 0 时，渲染循环会主动暂停。
+      // 每次移动鼠标都必须重新唤醒，才能让停留很久后的悬停继续排斥粒子。
+      ensureRenderLoop()
     }
 
     const handlePointerLeave = () => {
       pointer.active = false
+      // 唤醒一帧以上的回位动画，避免粒子停留在最后一次排斥位置。
+      ensureRenderLoop()
     }
 
     const handlePointerEnter = (event: PointerEvent) => {

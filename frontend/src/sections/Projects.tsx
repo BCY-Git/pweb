@@ -10,7 +10,7 @@ interface ProjectsProps {
 
 export function Projects({ projects }: ProjectsProps) {
   return (
-    <Section id="projects" title="项目经历" subtitle="projects">
+    <Section id="projects" title="项目经历" subtitle="projects" tone="ink">
       {projects.length > 0 && (
         <div className="projects__deck">
           <div className="projects__deck-copy">

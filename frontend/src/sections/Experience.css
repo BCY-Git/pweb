@@ -14,9 +14,25 @@
 }
 
 .experience__education {
+  position: relative;
+  overflow: hidden;
   padding: 28px 0;
   border-top: 1px solid var(--border-strong);
   border-bottom: 1px solid var(--border);
+}
+
+/* WebGL 波形背景层：绝对铺满、不拦截交互，内容抬到其上 */
+.experience__education-waves {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.experience__education .experience__kicker,
+.experience__education .experience__header,
+.experience__education .experience__awards {
+  position: relative;
+  z-index: 1;
 }
 
 .experience__header {

@@ -21,7 +21,7 @@ const NAME_COLORS = {
 
 export function Hero({ profile }: HeroProps) {
   const name = profile?.name ?? 'BCY'
-  const title = profile?.title ?? 'AI Agent 全栈开发工程师'
+  const title = '持续学习的 AI 协作工程师'
   const dotColors = DOT_COLORS.dark
   const nameColors = NAME_COLORS.dark
 
@@ -96,7 +96,7 @@ export function Hero({ profile }: HeroProps) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.3 }}
         >
-          把 Agent、RAG 与本机能力集成为可控、可中断、可恢复的工程链路。
+          以工程化学习驱动真实问题落地，将前端、Agent、RAG 与私有模型沉淀为可控、可复用的工程能力。
         </motion.p>
 
         <motion.div
@@ -121,7 +121,7 @@ export function Hero({ profile }: HeroProps) {
         </motion.div>
       </div>
 
-      <a href="#about" className="hero__scroll" aria-label="向下滚动">
+      <a href="#experience" className="hero__scroll" aria-label="向下滚动">
         <ChevronDown size={20} />
       </a>
     </section>

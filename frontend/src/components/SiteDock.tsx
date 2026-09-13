@@ -5,6 +5,7 @@ import {
   BriefcaseBusiness,
   FolderKanban,
   Home,
+  LayoutDashboard,
   Moon,
   Rss,
   Send,
@@ -17,9 +18,9 @@ import Dock, { type DockItemData } from './Dock'
 
 const SECTIONS = [
   { id: 'hero', icon: Home },
+  { id: 'experience', icon: BriefcaseBusiness },
   { id: 'about', icon: UserRound },
   { id: 'blog', icon: Rss },
-  { id: 'experience', icon: BriefcaseBusiness },
   { id: 'projects', icon: FolderKanban },
   { id: 'skills', icon: Braces },
   { id: 'learning', icon: BookOpen },
@@ -27,8 +28,8 @@ const SECTIONS = [
 ] as const
 
 const SECTION_LABELS = {
-  zh: ['首页', '关于', '博客', '经历', '项目', '技能', '学习', '联系'],
-  en: ['Home', 'About', 'Blog', 'Experience', 'Work', 'Skills', 'Notes', 'Contact'],
+  zh: ['首页', '经历', '关于', '博客', '项目', '技能', '学习', '联系'],
+  en: ['Home', 'Experience', 'About', 'Blog', 'Work', 'Skills', 'Notes', 'Contact'],
 } as const
 
 function scrollToSection(id: string) {
@@ -36,7 +37,7 @@ function scrollToSection(id: string) {
   window.history.replaceState(null, '', `#${id}`)
 }
 
-export function SiteDock() {
+export function SiteDock({ isAuthed = false }: { isAuthed?: boolean }) {
   const [activeSection, setActiveSection] = useState('hero')
   const [compact, setCompact] = useState(() =>
     window.matchMedia('(max-width: 640px)').matches,
@@ -86,6 +87,18 @@ export function SiteDock() {
       active: activeSection === id,
       onClick: () => scrollToSection(id),
     })),
+    // 工作台：仅管理员登录后出现，整页跳转到 /app（登录墙后）
+    ...(isAuthed
+      ? [
+          {
+            label: language === 'zh' ? '工作台' : 'Workbench',
+            icon: <LayoutDashboard size={compact ? 17 : 19} strokeWidth={1.8} />,
+            onClick: () => {
+              window.location.href = '/app'
+            },
+          },
+        ]
+      : []),
     {
       label: theme === 'dark' ? '切换浅色' : '切换深色',
       icon:

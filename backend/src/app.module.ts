@@ -10,6 +10,7 @@ import { ProjectsModule } from './modules/projects/projects.module'
 import { SkillsModule } from './modules/skills/skills.module'
 import { MessagesModule } from './modules/messages/messages.module'
 import { CsdnModule } from './modules/csdn/csdn.module'
+import { AuthModule } from './modules/auth/auth.module'
 
 /**
  * 静态文件托管和 SPA fallback 由 main.ts 通过底层 Express 注册，
@@ -30,6 +31,7 @@ import { CsdnModule } from './modules/csdn/csdn.module'
     SkillsModule,
     MessagesModule,
     CsdnModule,
+    AuthModule,
   ],
   controllers: [AppController],
 })

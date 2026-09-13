@@ -15,24 +15,32 @@ import './Navbar.css'
 const NAV_ITEMS: Record<Language, { href: string; label: string }[]> = {
   zh: [
     { href: '#hero', label: '首页' },
+    { href: '#experience', label: '经历' },
     { href: '#about', label: '关于' },
     { href: '#blog', label: '博客' },
-    { href: '#experience', label: '经历' },
     { href: '#projects', label: '项目' },
     { href: '#skills', label: '技能' },
     { href: '#learning', label: '学习' },
+    { href: '#workflow', label: '工作流' },
     { href: '#contact', label: '联系' },
   ],
   en: [
     { href: '#hero', label: 'Home' },
+    { href: '#experience', label: 'Experience' },
     { href: '#about', label: 'About' },
     { href: '#blog', label: 'Blog' },
-    { href: '#experience', label: 'Experience' },
     { href: '#projects', label: 'Work' },
     { href: '#skills', label: 'Skills' },
     { href: '#learning', label: 'Notes' },
+    { href: '#workflow', label: 'Workflow' },
     { href: '#contact', label: 'Contact' },
   ],
+}
+
+// 工作台入口：仅管理员登录后出现（isAuthed），跳转到 /app（个人工作台，登录墙后）。
+const WORKBENCH_ITEM: Record<Language, { href: string; label: string }> = {
+  zh: { href: '/app', label: '工作台' },
+  en: { href: '/app', label: 'Workbench' },
 }
 
 // 与 GooeyNav 示例的 `colors={[1, 2, 3, 1, 2, 3, 1, 4]}` 对应。
@@ -58,9 +66,10 @@ type Particle = {
 
 interface NavbarProps {
   profile: Profile | null
+  isAuthed?: boolean
 }
 
-export function Navbar({ profile }: NavbarProps) {
+export function Navbar({ profile, isAuthed = false }: NavbarProps) {
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const [activeIndex, setActiveIndex] = useState(0)
@@ -75,7 +84,9 @@ export function Navbar({ profile }: NavbarProps) {
   const scrollSyncTimer = useRef<number | null>(null)
   const { theme, toggle } = useTheme()
   const { language, toggle: toggleLanguage } = useLanguage()
-  const navItems = NAV_ITEMS[language]
+  const navItems = isAuthed
+    ? [...NAV_ITEMS[language], WORKBENCH_ITEM[language]]
+    : NAV_ITEMS[language]
 
   const updateIndicator = useCallback((index: number) => {
     const nav = navRef.current
@@ -162,6 +173,8 @@ export function Navbar({ profile }: NavbarProps) {
       const readingLine = window.innerHeight * 0.32
       let nextIndex = 0
       navItems.forEach((item, index) => {
+        // 锚点项才参与滚动高亮；/app 这类页面链接不是合法选择器，跳过
+        if (!item.href.startsWith('#')) return
         const section = document.querySelector(item.href)
         if (section && section.getBoundingClientRect().top <= readingLine) {
           nextIndex = index

@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import { Award, BriefcaseBusiness, GraduationCap } from 'lucide-react'
+import SlicedWaves from '../components/SlicedWaves'
 import { Section } from '../components/Section'
 import './Experience.css'
 
@@ -24,7 +25,7 @@ const WORK_EXPERIENCE = [
 
 export function Experience() {
   return (
-    <Section id="experience" title="经历" subtitle="experience">
+    <Section id="experience" title="经历" subtitle="experience" tone="stone">
       <div className="experience">
         <motion.article
           className="experience__education"
@@ -33,6 +34,21 @@ export function Experience() {
           viewport={{ once: true, margin: '-60px' }}
           transition={{ duration: 0.45 }}
         >
+          {/* WebGL 波形背景：贴着 stone 色调的青色条带，置于内容之下 */}
+          <SlicedWaves
+            className="experience__education-waves"
+            color1="#167f92"
+            color2="#8fb9c0"
+            color3="#e8e7e2"
+            columns={10}
+            rows={5}
+            barThickness={0.14}
+            speed={0.25}
+            travel={0.6}
+            opacity={0.3}
+            grain={false}
+            mouseInteraction={false}
+          />
           <div className="experience__kicker">
             <GraduationCap size={17} /> EDUCATION
           </div>

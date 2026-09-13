@@ -44,7 +44,7 @@ export function Learning() {
   if (notes.length === 0) return null
 
   return (
-    <Section id="learning" title="学习笔记" subtitle="learning">
+    <Section id="learning" title="学习笔记" subtitle="learning" tone="paper">
       <motion.div
         className="learning"
         initial={{ opacity: 0, y: 24 }}

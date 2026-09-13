@@ -213,11 +213,46 @@ export function DriftWall({
       rafRef.current = requestAnimationFrame(animate)
     }
 
-    rafRef.current = requestAnimationFrame(animate)
-    return () => {
+    // 离屏或切后台时停掉 rAF，避免整页常驻的帧循环空转
+    let inView = true
+    let pageVisible = !document.hidden
+
+    const stopLoop = () => {
       if (rafRef.current !== null) cancelAnimationFrame(rafRef.current)
       rafRef.current = null
       lastTimestampRef.current = null
+    }
+    const syncLoop = () => {
+      if (inView && pageVisible) {
+        if (rafRef.current === null) {
+          rafRef.current = requestAnimationFrame(animate)
+        }
+      } else {
+        stopLoop()
+      }
+    }
+
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        inView = entry?.isIntersecting ?? false
+        syncLoop()
+      },
+      { rootMargin: '120px 0px' },
+    )
+    const container = containerRef.current
+    if (container) io.observe(container)
+
+    const onVisibility = () => {
+      pageVisible = !document.hidden
+      syncLoop()
+    }
+    document.addEventListener('visibilitychange', onVisibility)
+
+    syncLoop()
+    return () => {
+      io.disconnect()
+      document.removeEventListener('visibilitychange', onVisibility)
+      stopLoop()
     }
   }, [applyPlaneTransform, baseVelocities, columnMeta, parallax, pauseOnHover, reducedMotion])
 

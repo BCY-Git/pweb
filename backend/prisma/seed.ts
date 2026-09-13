@@ -12,11 +12,11 @@ const toJson = (items: string[]) => JSON.stringify(items)
 async function main() {
   const profile = {
     name: 'BCY',
-    title: 'AI Agent 全栈开发工程师',
+    title: '持续学习的 AI 协作工程师',
     bio: [
       '## 关于我',
       '',
-      '专注于将模型调用构建为**可控、可中断、可恢复**的工程链路，具备 Agent Harness、RAG 与全栈系统集成实践。',
+      '保持对新技术的持续学习，专注将 Agent、RAG 与本机能力集成为**可控、可中断、可恢复**的工程链路，放大人与 AI 的协作价值。',
       '熟悉 TypeScript、React / Next.js、Vue 3、Node.js / NestJS 与 Java / Spring Boot，可独立完成从前端架构到本机能力集成的端到端交付。',
       '',
       '重视 Schema 校验、路径白名单、密钥保护、乐观版本冲突检测与自动化测试，也有保密环境离线部署和现场交付经验。',
